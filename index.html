@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         /* Estilos personalizados */
         body {
@@ -16,28 +16,28 @@
         .hidden {
             display: none;
         }
-        /* Simple loader */
-        .loader {
-            border: 4px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 4px solid #3498db;
-            width: 24px;
-            height: 24px;
-            animation: spin 2s linear infinite;
+        .hero-gradient {
+            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .faq-item .faq-answer {
+            display: none;
+            transition: max-height 0.3s ease-out;
+        }
+        .faq-item.open .faq-answer {
+            display: block;
+        }
+        .faq-item.open .faq-icon {
+            transform: rotate(180deg);
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-gray-900 text-gray-200">
 
     <!-- Landing Page -->
     <main id="landing-page-view">
-        <header class="bg-white shadow-sm sticky top-0 z-50">
+        <header class="bg-gray-900/80 backdrop-blur-md shadow-lg shadow-blue-500/5 sticky top-0 z-50">
             <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-                <div class="text-2xl font-bold text-blue-600">LinkUpCard</div>
+                <div class="text-2xl font-bold text-white">LinkUpCard</div>
                 <button id="start-creating-btn-nav" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
                     Empezar a Crear
                 </button>
@@ -45,97 +45,134 @@
         </header>
 
         <!-- Hero Section -->
-        <section class="text-center py-20 px-6 bg-white">
-            <h1 class="text-5xl font-bold mb-4">Moderniza tu Networking con Tarjetas Digitales Inteligentes</h1>
-            <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">La solución integral para crear perfiles digitales, escanear tarjetas físicas con OCR y organizar tus contactos de forma eficiente.</p>
-            <button id="start-creating-btn-hero" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-blue-700 transition-transform transform hover:scale-105">
-                Comienza Gratis
-            </button>
+        <section class="text-center py-24 px-6 hero-gradient">
+            <div class="container mx-auto">
+                <h1 class="text-5xl md:text-6xl font-extrabold mb-4 leading-tight text-white">La Tarjeta de Presentación del Futuro, Hoy.</h1>
+                <p class="text-xl text-gray-400 mb-8 max-w-3xl mx-auto">Crea, comparte y gestiona tus contactos de networking de forma inteligente. Nunca más pierdas una oportunidad.</p>
+                <button id="start-creating-btn-hero" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-blue-700 transition-transform transform hover:scale-105">
+                    Crea tu Tarjeta Gratis
+                </button>
+                <div class="mt-16 flex justify-center">
+                    <!-- Phone Mockup -->
+                    <div class="w-full max-w-sm">
+                        <div class="relative mx-auto border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[600px] w-[300px] shadow-2xl shadow-blue-500/20">
+                            <div class="w-[148px] h-[18px] bg-gray-800 top-0 rounded-b-[1rem] left-1/2 -translate-x-1/2 absolute"></div>
+                            <div class="h-[46px] w-[3px] bg-gray-800 absolute -left-[17px] top-[72px] rounded-l-lg"></div>
+                            <div class="h-[46px] w-[3px] bg-gray-800 absolute -left-[17px] top-[124px] rounded-l-lg"></div>
+                            <div class="h-[64px] w-[3px] bg-gray-800 absolute -right-[17px] top-[142px] rounded-r-lg"></div>
+                            <div class="rounded-[2rem] overflow-hidden w-full h-full bg-gray-50">
+                                <!-- Contenido de la tarjeta dentro del mockup -->
+                                <div class="bg-blue-500 h-28 relative">
+                                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop" class="w-24 h-24 rounded-full object-cover border-4 border-white absolute -bottom-12 left-1/2 -translate-x-1/2">
+                                </div>
+                                <div class="pt-16 p-4 text-center">
+                                    <h2 class="text-xl font-bold text-gray-800">Sophia Kub</h2>
+                                    <p class="text-gray-500 text-sm">Marketing Director en Brightwave</p>
+                                </div>
+                                <div class="px-6 pb-4 space-y-3">
+                                    <a href="#" class="w-full text-center block font-bold py-3 px-4 rounded-lg bg-blue-600 text-white">Guardar Contacto</a>
+                                    <div class="flex justify-center gap-5 p-2">
+                                        <svg class="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                                        <svg class="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-.424.727-.666 1.581-.666 2.477 0 1.69.86 3.178 2.158 4.049-.802-.026-1.55-.248-2.2-.608v.064c0 2.358 1.678 4.322 3.898 4.774-.407.111-.838.171-1.28.171-.314 0-.618-.031-.926-.087.618 1.932 2.413 3.338 4.545 3.375-1.667 1.305-3.772 2.085-6.053 2.085-.394 0-.782-.023-1.164-.067 2.153 1.386 4.703 2.193 7.423 2.193 8.907 0 13.788-7.373 13.788-13.788 0-.21 0-.419-.014-.627.947-.684 1.77-1.536 2.427-2.517z"/></svg>
+                                        <svg class="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                                    </div>
+                                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=example" class="mx-auto">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
-        <!-- Problema Section -->
-        <section class="py-20 px-6 bg-gray-50">
+        <!-- How it works Section -->
+        <section class="py-20 px-6 bg-gray-900">
             <div class="container mx-auto text-center">
-                <h2 class="text-3xl font-bold mb-4">El Networking Tradicional Está Roto</h2>
-                <p class="text-lg text-gray-600 mb-12 max-w-2xl mx-auto">Las herramientas actuales no están a la altura de un mundo digital y dinámico.</p>
-                <div class="grid md:grid-cols-3 gap-10">
+                <h2 class="text-4xl font-bold text-white mb-12">Networking en 3 Simples Pasos</h2>
+                <div class="grid md:grid-cols-3 gap-12">
                     <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2">Tarjetas Olvidadas</h3>
-                        <p class="text-gray-600">Las tarjetas físicas se pierden o quedan olvidadas después de los eventos, perdiendo oportunidades valiosas.</p>
+                        <div class="text-3xl font-bold text-blue-500 mb-4">01</div>
+                        <h3 class="text-xl font-bold text-white mb-2">Crea tu Perfil</h3>
+                        <p class="text-gray-400">Diseña tu tarjeta digital en segundos con tu información de contacto y redes sociales.</p>
                     </div>
                     <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2">Registro Ineficiente</h3>
-                        <p class="text-gray-600">El registro manual de contactos es lento, tedioso y muy propenso a errores de transcripción.</p>
+                        <div class="text-3xl font-bold text-blue-500 mb-4">02</div>
+                        <h3 class="text-xl font-bold text-white mb-2">Comparte con QR</h3>
+                        <p class="text-gray-400">Comparte tu perfil al instante con tu código QR personal. La otra persona no necesita la app.</p>
                     </div>
                     <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2">Falta de Seguimiento</h3>
-                        <p class="text-gray-600">El networking actual carece de herramientas efectivas para dar seguimiento y cultivar las nuevas relaciones.</p>
+                        <div class="text-3xl font-bold text-blue-500 mb-4">03</div>
+                        <h3 class="text-xl font-bold text-white mb-2">Gestiona tus Contactos</h3>
+                        <p class="text-gray-400">Escanea tarjetas físicas con OCR y organiza todos tus contactos en un solo lugar.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Features Section (2-column) -->
+        <section class="py-20 px-6 bg-gray-800">
+            <div class="container mx-auto space-y-20">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <span class="text-blue-400 font-semibold">ESCANEO INTELIGENTE</span>
+                        <h3 class="text-4xl font-bold mt-2 mb-4 text-white">Di Adiós a la Entrada Manual</h3>
+                        <p class="text-gray-400">Nuestra tecnología OCR lee las tarjetas de presentación por ti. Simplemente apunta tu cámara, escanea y LinkUpCard se encarga de crear el contacto digital, sin errores.</p>
+                    </div>
+                    <div>
+                        <img src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?q=80&w=2070&auto=format&fit=crop" class="rounded-xl shadow-lg" alt="Escaneo OCR de una tarjeta">
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="md:order-2">
+                        <span class="text-blue-400 font-semibold">ORGANIZACIÓN TOTAL</span>
+                        <h3 class="text-4xl font-bold mt-2 mb-4 text-white">Tus Contactos, a tu Manera</h3>
+                        <p class="text-gray-400">Añade etiquetas, notas y recordatorios a cada contacto. Filtra por evento, ciudad o interés para encontrar a la persona que buscas en el momento que la necesitas.</p>
+                    </div>
+                    <div class="md:order-1">
+                        <img src="https://images.unsplash.com/photo-1556155092-490a1ba16284?q=80&w=2070&auto=format&fit=crop" class="rounded-xl shadow-lg" alt="Organización de contactos en la app">
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Solución Section -->
-        <section class="py-20 px-6 bg-white">
-            <div class="container mx-auto">
-                <h2 class="text-3xl font-bold text-center mb-12">Nuestra Solución Integral</h2>
-                <div class="grid md:grid-cols-3 gap-10">
-                    <div class="text-center p-6">
-                        <div class="text-blue-500 mb-4 inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8z"></path><path d="M12 12v-1"></path></svg></div>
-                        <h3 class="text-xl font-bold mb-2">Tarjetas Virtuales</h3>
-                        <p class="text-gray-600">Crea perfiles y tarjetas virtuales personalizadas con tu información actualizable en tiempo real a través de un QR personal.</p>
-                    </div>
-                    <div class="text-center p-6">
-                        <div class="text-blue-500 mb-4 inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.58 16.09l-1.09-7.66A5 5 0 0 0 15.57 4H8.43a5 5 0 0 0-4.92 4.43l-1.09 7.66a2 2 0 0 0 1.98 2.34h13.2a2 2 0 0 0 1.98-2.34z"></path><line x1="12" y1="4" x2="12" y2="18"></line></svg></div>
-                        <h3 class="text-xl font-bold mb-2">Escaneo OCR</h3>
-                        <p class="text-gray-600">Escanea tarjetas físicas, convierte los datos a formato digital automáticamente y olvídate de la entrada manual.</p>
-                    </div>
-                    <div class="text-center p-6">
-                        <div class="text-blue-500 mb-4 inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
-                        <h3 class="text-xl font-bold mb-2">Organización Inteligente</h3>
-                        <p class="text-gray-600">Organiza tus contactos con etiquetas por evento, interés o ciudad. Usa la búsqueda rápida para encontrarlos al instante.</p>
-                    </div>
-                    <div class="text-center p-6">
-                        <div class="text-blue-500 mb-4 inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></div>
-                        <h3 class="text-xl font-bold mb-2">Seguimiento con IA</h3>
-                        <p class="text-gray-600">Recibe recordatorios y acciones sugeridas por IA para no dejar enfriar ninguna conexión importante.</p>
-                    </div>
-                     <div class="text-center p-6">
-                        <div class="text-blue-500 mb-4 inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
-                        <h3 class="text-xl font-bold mb-2">Grupos y Chats</h3>
-                        <p class="text-gray-600">Crea grupos temáticos y mantén la conversación activa con los chats internos de la aplicación.</p>
-                    </div>
-                     <div class="text-center p-6">
-                        <div class="text-blue-500 mb-4 inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="m9 12 2 2 4-4"></path></svg></div>
-                        <h3 class="text-xl font-bold mb-2">Gamificación</h3>
-                        <p class="text-gray-600">Gana puntos e insignias por tu actividad de networking y compite en rankings durante los eventos.</p>
-                    </div>
+        <!-- Integrations Section -->
+        <section class="py-20 px-6 bg-gray-900">
+            <div class="container mx-auto text-center">
+                <h2 class="text-4xl font-bold text-white mb-4">Se Integra con tus Herramientas Favoritas</h2>
+                <p class="text-gray-400 mb-12 max-w-2xl mx-auto">Exporta tus nuevos contactos a los sistemas que ya usas, manteniendo tu flujo de trabajo intacto.</p>
+                <div class="flex flex-wrap justify-center items-center gap-x-8 gap-y-4 text-gray-400">
+                    <span class="font-semibold text-xl">Google Contacts</span>
+                    <span class="font-semibold text-xl">Outlook</span>
+                    <span class="font-semibold text-xl">HubSpot</span>
+                    <span class="font-semibold text-xl">Salesforce</span>
+                    <span class="font-semibold text-xl">Zapier</span>
                 </div>
             </div>
         </section>
 
-        <!-- Casos de Uso Section -->
-        <section class="py-20 px-6 bg-gray-50">
-            <div class="container mx-auto">
-                <h2 class="text-3xl font-bold text-center mb-12">Ideal para Profesionales y Eventos</h2>
-                <div class="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-                    <div class="p-4 bg-white rounded-lg shadow-sm">
-                        <p class="font-semibold">Eventos Tecnológicos</p>
-                    </div>
-                    <div class="p-4 bg-white rounded-lg shadow-sm">
-                        <p class="font-semibold">Conferencias y Ferias</p>
-                    </div>
-                    <div class="p-4 bg-white rounded-lg shadow-sm">
-                        <p class="font-semibold">Equipos de Ventas</p>
-                    </div>
-                    <div class="p-4 bg-white rounded-lg shadow-sm">
-                        <p class="font-semibold">Coworkings</p>
-                    </div>
+        <!-- FAQ Section -->
+        <section class="py-20 px-6 bg-gray-800">
+            <div class="container mx-auto max-w-3xl">
+                <h2 class="text-4xl font-bold text-white text-center mb-12">Preguntas Frecuentes</h2>
+                <div class="space-y-4" id="faq-container">
+                    <!-- Las preguntas se insertarán aquí con JS -->
                 </div>
             </div>
         </section>
 
-        <footer class="text-center py-6 bg-gray-800 text-white">
+        <!-- Final CTA Section -->
+        <section class="py-20 px-6 hero-gradient">
+            <div class="container mx-auto text-center">
+                <h2 class="text-4xl font-bold text-white mb-4">Listo para Transformar tu Networking?</h2>
+                <p class="text-lg text-gray-300 mb-8">Únete a miles de profesionales que ya conectan de forma más inteligente.</p>
+                <button id="start-creating-btn-final" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-blue-700 transition-transform transform hover:scale-105">
+                    Crea tu Tarjeta Gratis
+                </button>
+            </div>
+        </section>
+
+        <footer class="text-center py-6 bg-gray-900 text-gray-400">
             <p>&copy; 2025 LinkUpCard. Todos los derechos reservados.</p>
         </footer>
     </main>
@@ -192,8 +229,8 @@
                 <div id="add-components-panel" class="space-y-2"></div>
             </aside>
             <main class="flex-1 p-8 overflow-y-auto bg-gray-200 flex justify-center items-start">
-                <div id="canvas-container" class="w-full max-w-md rounded-xl shadow-lg transition-all">
-                    <div id="canvas" class="p-4"></div>
+                <div id="canvas-container" class="w-full max-w-md bg-white rounded-xl shadow-lg overflow-hidden">
+                    <!-- El lienzo se renderizará aquí -->
                 </div>
             </main>
             <aside id="properties-panel-container" class="w-80 bg-white p-4 border-l overflow-y-auto"></aside>
@@ -215,10 +252,11 @@
         let selectedComponentId = null;
         
         const COMPONENT_TYPES = {
-            heading: { name: 'Encabezado', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v7a6 6 0 0 0 6 6 6 6 0 0 0 6-6V3"></path><line x1="4" y1="21" x2="20" y2="21"></line></svg>' },
-            text: { name: 'Texto', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>' },
-            image: { name: 'Imagen', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>' },
-            button: { name: 'Botón', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8z"></path><path d="M12 12v-1"></path></svg>' },
+            heading: { name: 'Nombre y Cargo', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v7a6 6 0 0 0 6 6 6 6 0 0 0 6-6V3"></path><line x1="4" y1="21" x2="20" y2="21"></line></svg>' },
+            text: { name: 'Biografía/Texto', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>' },
+            image: { name: 'Foto de Perfil', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>' },
+            button: { name: 'Botón (Contacto)', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8z"></path><path d="M12 12v-1"></path></svg>' },
+            socials: { name: 'Redes Sociales', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>'}
         };
 
         const views = {
@@ -226,7 +264,6 @@
             selector: document.getElementById('template-selector-view'),
             editor: document.getElementById('editor-view'),
         };
-        const canvas = document.getElementById('canvas');
         const canvasContainer = document.getElementById('canvas-container');
         const propertiesPanelContainer = document.getElementById('properties-panel-container');
         const savedCardsContainer = document.getElementById('saved-cards-container');
@@ -267,67 +304,107 @@
 
         function renderEditor() {
             cardNameInput.value = currentCard.name;
-            canvasContainer.style.backgroundColor = currentCard.backgroundColor;
             renderCanvas();
             renderPropertiesPanel();
         }
 
         function renderCanvas() {
-            canvas.innerHTML = '';
-            currentCard.components.forEach(component => {
-                const isSelected = component.id === selectedComponentId;
-                const wrapper = document.createElement('div');
-                wrapper.dataset.componentId = component.id;
-                
-                let elementHTML = '';
-                switch (component.type) {
-                    case 'heading':
-                        elementHTML = `<h2 class="text-2xl font-bold p-2 m-2 cursor-pointer break-words" style="color: ${component.properties.color || '#000000'}">${component.properties.text || 'Tu Nombre'}</h2>`;
-                        break;
-                    case 'text':
-                        elementHTML = `<p class="p-2 m-2 cursor-pointer break-words" style="color: ${component.properties.color || '#333333'}; font-size: ${component.properties.fontSize || 16}px;">${component.properties.text || 'Tu Cargo en Tu Empresa'}</p>`;
-                        break;
-                    case 'image':
-                        elementHTML = `<div class="p-2 m-2"><img src="${component.properties.src || 'https://placehold.co/400x200/e2e8f0/cbd5e0?text=Tu+Logo+o+Foto'}" alt="${component.properties.alt || 'Imagen de perfil'}" class="w-full h-auto object-cover rounded-md cursor-pointer"></div>`;
-                        break;
-                    case 'button':
-                         elementHTML = `<div class="p-2 m-2"><button class="w-full font-bold py-2 px-4 rounded-lg cursor-pointer" style="background-color: ${component.properties.bgColor || '#3b82f6'}; color: ${component.properties.textColor || '#ffffff'}">${component.properties.text || 'Contactar'}</button></div>`;
-                        break;
-                }
-                wrapper.innerHTML = elementHTML;
-                wrapper.className = `component-wrapper ${isSelected ? 'ring-2 ring-blue-500' : 'hover:ring-2 hover:ring-blue-200'}`;
-                canvas.appendChild(wrapper);
+            canvasContainer.innerHTML = ''; // Limpiar contenedor principal
+
+            const cardWrapper = document.createElement('div');
+            cardWrapper.style.backgroundColor = currentCard.backgroundColor || '#ffffff';
+
+            const profileImageComponent = currentCard.components.find(c => c.type === 'image');
+            const headingComponent = currentCard.components.find(c => c.type === 'heading');
+            const textComponent = currentCard.components.find(c => c.type === 'text');
+            const socialsComponent = currentCard.components.find(c => c.type === 'socials');
+            
+            let headerHTML = `
+                <div class="bg-blue-600 h-24 relative">
+                    ${profileImageComponent ? `<img src="${profileImageComponent.properties.src || 'https://placehold.co/100x100/e2e8f0/cbd5e0?text=Foto'}" class="w-24 h-24 rounded-full border-4 border-white absolute -bottom-12 left-1/2 -translate-x-1/2 cursor-pointer" onclick="setSelectedComponentId(${profileImageComponent.id})">` : ''}
+                </div>
+            `;
+            
+            let bodyHTML = `<div class="pt-16 p-6 text-center">`;
+            if (headingComponent) {
+                bodyHTML += `<h2 class="text-2xl font-bold cursor-pointer text-gray-800" onclick="setSelectedComponentId(${headingComponent.id})">${headingComponent.properties.text || 'Tu Nombre'}</h2>`;
+            }
+            if (textComponent) {
+                bodyHTML += `<p class="text-gray-600 cursor-pointer" onclick="setSelectedComponentId(${textComponent.id})">${textComponent.properties.text || 'Tu Cargo en Tu Empresa'}</p>`;
+            }
+            bodyHTML += `</div>`;
+
+            let componentsHTML = `<div class="px-6 pb-6 space-y-4">`;
+            currentCard.components.filter(c => !['image', 'heading', 'text', 'socials'].includes(c.type)).forEach(component => {
+                componentsHTML += renderComponent(component);
             });
+            if (socialsComponent) {
+                componentsHTML += renderComponent(socialsComponent);
+            }
+            componentsHTML += `</div>`;
+
+            let qrHTML = `
+                <div class="bg-gray-100 p-4 flex flex-col items-center gap-2">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://example.com/${userId}/${currentCard.id || ''}" alt="QR Code">
+                    <p class="text-sm text-gray-600">Escanea para conectar</p>
+                </div>
+            `;
+
+            cardWrapper.innerHTML = headerHTML + bodyHTML + componentsHTML + qrHTML;
+            canvasContainer.appendChild(cardWrapper);
+        }
+
+        function renderComponent(component) {
+            const isSelected = component.id === selectedComponentId;
+            let elementHTML = '';
+            const wrapperClass = `component-wrapper ${isSelected ? 'ring-2 ring-blue-500 rounded-lg' : 'hover:ring-2 hover:ring-blue-200 rounded-lg'}`;
+            
+            switch (component.type) {
+                case 'button':
+                     elementHTML = `<div class="${wrapperClass}" onclick="setSelectedComponentId(${component.id})"><button class="w-full font-bold py-2 px-4 rounded-lg cursor-pointer" style="background-color: ${component.properties.bgColor || '#3b82f6'}; color: ${component.properties.textColor || '#ffffff'}">${component.properties.text || 'Contactar'}</button></div>`;
+                    break;
+                case 'socials':
+                    const p = component.properties;
+                    elementHTML += `<div class="flex justify-center gap-4 p-2 ${wrapperClass}" onclick="setSelectedComponentId(${component.id})">`;
+                    if(p.linkedin) elementHTML += `<a href="${p.linkedin}" target="_blank"><svg class="w-6 h-6 text-gray-600 hover:text-blue-700" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>`;
+                    if(p.twitter) elementHTML += `<a href="${p.twitter}" target="_blank"><svg class="w-6 h-6 text-gray-600 hover:text-blue-500" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-.424.727-.666 1.581-.666 2.477 0 1.69.86 3.178 2.158 4.049-.802-.026-1.55-.248-2.2-.608v.064c0 2.358 1.678 4.322 3.898 4.774-.407.111-.838.171-1.28.171-.314 0-.618-.031-.926-.087.618 1.932 2.413 3.338 4.545 3.375-1.667 1.305-3.772 2.085-6.053 2.085-.394 0-.782-.023-1.164-.067 2.153 1.386 4.703 2.193 7.423 2.193 8.907 0 13.788-7.373 13.788-13.788 0-.21 0-.419-.014-.627.947-.684 1.77-1.536 2.427-2.517z"/></svg></a>`;
+                    if(p.instagram) elementHTML += `<a href="${p.instagram}" target="_blank"><svg class="w-6 h-6 text-gray-600 hover:text-pink-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.012 3.584-.07 4.85c-.148 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.85s.012-3.584.07-4.85c.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.85-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.947s-.014-3.667-.072-4.947c-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.072-4.948-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44 1.441-.645 1.441-1.44-.645-1.44-1.441-1.44z"/></svg></a>`;
+                    if(p.github) elementHTML += `<a href="${p.github}" target="_blank"><svg class="w-6 h-6 text-gray-600 hover:text-gray-900" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>`;
+                    elementHTML += `</div>`;
+                    break;
+            }
+            return elementHTML;
         }
         
         function renderPropertiesPanel() {
             const selectedComponent = currentCard?.components.find(c => c.id === selectedComponentId);
             propertiesPanelContainer.innerHTML = '';
 
-            let content = '<h3 class="text-lg font-semibold mb-4">Propiedades</h3>';
+            let content = '<h3 class="text-lg font-semibold mb-4 text-gray-800">Propiedades</h3>';
 
             if (selectedComponent) {
-                content += '<div class="mb-6 pb-6 border-b"><h4 class="font-semibold text-md mb-2">Propiedades del Componente</h4>';
+                content += '<div class="mb-6 pb-6 border-b"><h4 class="font-semibold text-md mb-2 text-gray-800">Propiedades del Componente</h4>';
                 
                 switch(selectedComponent.type) {
                     case 'heading':
-                    case 'button':
-                        content += createTextInput('text', 'Texto', selectedComponent.properties.text || '');
-                        if (selectedComponent.type === 'heading') {
-                             content += createColorInput('color', 'Color de Texto', selectedComponent.properties.color || '#000000');
-                        } else {
-                             content += createColorInput('bgColor', 'Color de Fondo', selectedComponent.properties.bgColor || '#3b82f6');
-                             content += createColorInput('textColor', 'Color de Texto', selectedComponent.properties.textColor || '#ffffff');
-                        }
+                        content += createTextInput('text', 'Nombre Completo', selectedComponent.properties.text || '');
                         break;
                     case 'text':
-                        content += createTextareaInput('text', 'Texto', selectedComponent.properties.text || '');
-                        content += createNumberInput('fontSize', 'Tamaño de Fuente (px)', selectedComponent.properties.fontSize || 16);
-                        content += createColorInput('color', 'Color', selectedComponent.properties.color || '#333333');
+                        content += createTextareaInput('text', 'Cargo y Empresa', selectedComponent.properties.text || '');
                         break;
                     case 'image':
-                        content += createTextInput('src', 'URL de la Imagen', selectedComponent.properties.src || '');
-                        content += createTextInput('alt', 'Texto Alternativo', selectedComponent.properties.alt || '');
+                        content += createTextInput('src', 'URL de tu Foto', selectedComponent.properties.src || '');
+                        break;
+                    case 'button':
+                        content += createTextInput('text', 'Texto del Botón', selectedComponent.properties.text || '');
+                        content += createColorInput('bgColor', 'Color de Fondo', selectedComponent.properties.bgColor || '#3b82f6');
+                        content += createColorInput('textColor', 'Color de Texto', selectedComponent.properties.textColor || '#ffffff');
+                        break;
+                    case 'socials':
+                         content += createTextInput('linkedin', 'URL de LinkedIn', selectedComponent.properties.linkedin || '');
+                         content += createTextInput('twitter', 'URL de Twitter/X', selectedComponent.properties.twitter || '');
+                         content += createTextInput('instagram', 'URL de Instagram', selectedComponent.properties.instagram || '');
+                         content += createTextInput('github', 'URL de GitHub', selectedComponent.properties.github || '');
                         break;
                 }
                 
@@ -336,7 +413,7 @@
                  content += `<div class="text-center text-gray-500 mt-10"><p>Selecciona un componente para editar sus propiedades.</p></div>`;
             }
 
-            content += '<div><h4 class="font-semibold text-md mb-2">Propiedades del Perfil</h4>';
+            content += '<div><h4 class="font-semibold text-md mb-2 text-gray-800">Diseño del Perfil</h4>';
             content += createColorInput('backgroundColor', 'Color de Fondo', currentCard?.backgroundColor || '#ffffff', true);
             content += '</div>';
 
@@ -347,21 +424,14 @@
             const id = `prop-${prop}`;
             return `<div class="space-y-1 mb-2">
                         <label for="${id}" class="block text-sm font-medium text-gray-700">${label}</label>
-                        <input type="text" id="${id}" value="${value}" oninput="handlePropertyChange('${prop}', this.value, ${isCardProp})" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+                        <input type="text" id="${id}" value="${value}" oninput="handlePropertyChange('${prop}', this.value, ${isCardProp})" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 text-gray-800">
                     </div>`;
         }
         function createTextareaInput(prop, label, value) {
             const id = `prop-${prop}`;
             return `<div class="space-y-1 mb-2">
                         <label for="${id}" class="block text-sm font-medium text-gray-700">${label}</label>
-                        <textarea id="${id}" oninput="handlePropertyChange('${prop}', this.value)" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">${value}</textarea>
-                    </div>`;
-        }
-        function createNumberInput(prop, label, value) {
-            const id = `prop-${prop}`;
-            return `<div class="space-y-1 mb-2">
-                        <label for="${id}" class="block text-sm font-medium text-gray-700">${label}</label>
-                        <input type="number" id="${id}" value="${value}" oninput="handlePropertyChange('${prop}', this.value)" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+                        <textarea id="${id}" oninput="handlePropertyChange('${prop}', this.value)" rows="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 text-gray-800">${value}</textarea>
                     </div>`;
         }
         function createColorInput(prop, label, value, isCardProp = false) {
@@ -377,7 +447,12 @@
                 id: null,
                 name: 'Mi Perfil Digital',
                 template: template,
-                components: [],
+                components: [
+                    {id: Date.now() + 1, type: 'image', properties: {}},
+                    {id: Date.now() + 2, type: 'heading', properties: {}},
+                    {id: Date.now() + 3, type: 'text', properties: {}},
+                    {id: Date.now() + 4, type: 'socials', properties: {}},
+                ],
                 backgroundColor: '#ffffff'
             };
             selectedComponentId = null;
@@ -395,10 +470,26 @@
         
         window.handleAddComponent = (type) => {
             if (!currentCard) return;
+            if (['image', 'heading', 'text', 'socials'].includes(type) && currentCard.components.some(c => c.type === type)) {
+                alert(`El componente '${COMPONENT_TYPES[type].name}' ya existe en el perfil.`);
+                return;
+            }
             const newComponent = { id: Date.now(), type, properties: {} };
             currentCard.components.push(newComponent);
             renderCanvas();
         };
+        
+        window.setSelectedComponentId = (id) => {
+            selectedComponentId = id;
+            renderPropertiesPanel();
+            document.querySelectorAll('.component-wrapper, img, h2, p').forEach(el => {
+                el.classList.remove('ring-2', 'ring-blue-500');
+            });
+            const targetElement = document.querySelector(`[onclick="setSelectedComponentId(${id})"]`);
+            if(targetElement){
+                targetElement.classList.add('ring-2', 'ring-blue-500');
+            }
+        }
 
         window.handlePropertyChange = (property, value, isCardProperty = false) => {
             if (!currentCard) return;
@@ -479,13 +570,13 @@
             Object.keys(COMPONENT_TYPES).forEach(type => {
                 const info = COMPONENT_TYPES[type];
                 const button = document.createElement('button');
-                button.className = 'w-full flex items-center gap-3 p-3 rounded-lg bg-gray-100 hover:bg-gray-200';
+                button.className = 'w-full flex items-center gap-3 p-3 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-800';
                 button.innerHTML = `${info.icon} <span>${info.name}</span>`;
                 button.onclick = () => handleAddComponent(type);
                 addComponentsPanel.appendChild(button);
             });
 
-            const startButtons = [document.getElementById('start-creating-btn-nav'), document.getElementById('start-creating-btn-hero')];
+            const startButtons = [document.getElementById('start-creating-btn-nav'), document.getElementById('start-creating-btn-hero'), document.getElementById('start-creating-btn-final')];
             startButtons.forEach(btn => btn.onclick = () => switchView('selector'));
             
             document.getElementById('home-button').onclick = () => {
@@ -502,18 +593,44 @@
             cardNameInput.oninput = (e) => {
                 if(currentCard) currentCard.name = e.target.value;
             };
-            canvas.addEventListener('click', (e) => {
-                const componentWrapper = e.target.closest('.component-wrapper');
-                if (componentWrapper) {
-                    selectedComponentId = parseInt(componentWrapper.dataset.componentId, 10);
-                    renderEditor();
-                }
-            });
+            
             propertiesPanelContainer.addEventListener('click', (e) => {
                 if (e.target.id === 'delete-component-button') {
                     handleDeleteComponent();
                 }
             });
+
+            // FAQ Logic
+            const faqs = [
+                { question: '¿La otra persona necesita tener LinkUpCard para recibir mi tarjeta?', answer: 'No. Tu tarjeta digital se puede compartir a través de un código QR o un enlace. Cualquiera con un smartphone puede escanear el QR y ver tu perfil en su navegador, sin necesidad de instalar nada.' },
+                { question: '¿Mis datos de contacto están seguros?', answer: 'Sí. La seguridad es nuestra máxima prioridad. Todos tus datos se almacenan de forma segura y tienes control total sobre qué información compartes en tu perfil público.' },
+                { question: '¿Puedo tener diferentes tarjetas para diferentes situaciones?', answer: '¡Absolutamente! Puedes crear múltiples perfiles (por ejemplo, uno para el trabajo y otro personal) y elegir cuál compartir en cada momento.' },
+                { question: '¿Cómo funciona el escaneo de tarjetas físicas?', answer: 'Nuestra app utiliza tecnología de Reconocimiento Óptico de Caracteres (OCR). Simplemente tomas una foto de la tarjeta de papel y la app extrae automáticamente el texto (nombre, empresa, teléfono, etc.) y lo convierte en un contacto digital.' }
+            ];
+            const faqContainer = document.getElementById('faq-container');
+            faqs.forEach(faq => {
+                const item = document.createElement('div');
+                item.className = 'faq-item bg-gray-700/50 rounded-lg';
+                item.innerHTML = `
+                    <button class="faq-question w-full flex justify-between items-center text-left p-4">
+                        <span class="text-lg font-semibold text-white">${faq.question}</span>
+                        <svg class="faq-icon w-6 h-6 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="faq-answer px-4 pb-4 text-gray-400">
+                        ${faq.answer}
+                    </div>
+                `;
+                faqContainer.appendChild(item);
+            });
+
+            faqContainer.addEventListener('click', (e) => {
+                const questionButton = e.target.closest('.faq-question');
+                if (questionButton) {
+                    const item = questionButton.parentElement;
+                    item.classList.toggle('open');
+                }
+            });
+
 
             switchView('landing');
         });

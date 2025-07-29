@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Constructor de Tarjetas Visuales</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos personalizados y para iconos */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .hidden {
+            display: none;
+        }
+        /* Simple loader */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 4px solid #3498db;
+            width: 24px;
+            height: 24px;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Vista de Selección de Plantilla -->
+    <div id="template-selector-view" class="min-h-screen flex flex-col items-center justify-center p-4">
+        <div class="w-full max-w-4xl">
+            <h1 class="text-4xl font-bold text-center text-gray-800 mb-2">Constructor de Tarjetas Visuales</h1>
+            <p class="text-center text-gray-600 mb-8">Elige una plantilla para empezar o carga una tarjeta guardada.</p>
+            
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h2 class="text-2xl font-semibold mb-4 text-gray-700">Crear Nueva Tarjeta</h2>
+                    <p class="text-gray-500 mb-4">Selecciona una estructura inicial.</p>
+                    <div class="space-y-4">
+                        <button onclick="handleCreateNewCard('single-column')" class="w-full text-left p-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                            <span class="font-bold">Columna Única</span>
+                            <p class="text-sm text-blue-100">Ideal para perfiles o anuncios simples.</p>
+                        </button>
+                        <button onclick="handleCreateNewCard('image-header')" class="w-full text-left p-4 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
+                            <span class="font-bold">Encabezado de Imagen</span>
+                            <p class="text-sm text-green-100">Perfecta para artículos o tarjetas de producto.</p>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h2 class="text-2xl font-semibold mb-4 text-gray-700">Mis Tarjetas Guardadas</h2>
+                    <div id="saved-cards-container" class="space-y-2 max-h-60 overflow-y-auto">
+                        <p class="text-gray-500">Cargando tarjetas...</p>
+                    </div>
+                </div>
+            </div>
+             <footer class="text-center text-gray-500 text-sm">
+                <p>Tu ID de usuario para compartir es: <strong id="user-id-display" class="select-all">Cargando...</strong></p>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Vista del Editor Principal -->
+    <div id="editor-view" class="hidden flex flex-col h-screen font-sans bg-gray-50">
+        <header class="flex items-center justify-between p-2 bg-white border-b shadow-sm">
+            <button id="back-button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">← Volver</button>
+            <input type="text" id="card-name-input" class="text-lg font-semibold border-b-2 border-transparent focus:border-blue-500 outline-none mx-4 flex-grow"/>
+            <button id="save-button" class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                Guardar
+            </button>
+        </header>
+        <div class="flex flex-grow overflow-hidden">
+            <!-- Panel de Componentes -->
+            <aside class="w-60 bg-white p-4 border-r overflow-y-auto">
+                <h3 class="text-lg font-semibold mb-4">Añadir Componentes</h3>
+                <div id="add-components-panel" class="space-y-2">
+                    <!-- Los botones para añadir componentes se insertarán aquí -->
+                </div>
+            </aside>
+
+            <!-- Lienzo Principal -->
+            <main class="flex-1 p-8 overflow-y-auto bg-gray-200 flex justify-center items-start">
+                <div id="canvas-container" class="w-full max-w-md rounded-xl shadow-lg transition-all">
+                    <div id="canvas" class="p-4">
+                        <!-- Los componentes de la tarjeta se renderizarán aquí -->
+                    </div>
+                </div>
+            </main>
+
+            <!-- Panel de Propiedades -->
+            <aside id="properties-panel-container" class="w-80 bg-white p-4 border-l overflow-y-auto">
+                 <!-- El panel de propiedades se renderizará aquí -->
+            </aside>
+        </div>
+    </div>
+
+    <script type="module">
+        // --- IMPORTACIONES DE FIREBASE ---
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, addDoc, setDoc, onSnapshot, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- CONFIGURACIÓN DE FIREBASE ---
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+        // --- ESTADO DE LA APLICACIÓN ---
+        let db, auth;
+        let userId = null;
+        let currentCard = null;
+        let savedCards = [];
+        let selectedComponentId = null;
+        
+        // --- DEFINICIÓN DE COMPONENTES ---
+        const COMPONENT_TYPES = {
+            heading: { name: 'Encabezado', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v7a6 6 0 0 0 6 6 6 6 0 0 0 6-6V3"></path><line x1="4" y1="21" x2="20" y2="21"></line></svg>' },
+            text: { name: 'Texto', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>' },
+            image: { name: 'Imagen', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>' },
+            button: { name: 'Botón', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8z"></path><path d="M12 12v-1"></path></svg>' },
+        };
+
+        // --- MANEJO DEL DOM Y RENDERIZADO ---
+        
+        const views = {
+            selector: document.getElementById('template-selector-view'),
+            editor: document.getElementById('editor-view'),
+        };
+        const canvas = document.getElementById('canvas');
+        const canvasContainer = document.getElementById('canvas-container');
+        const propertiesPanelContainer = document.getElementById('properties-panel-container');
+        const savedCardsContainer = document.getElementById('saved-cards-container');
+        const cardNameInput = document.getElementById('card-name-input');
+        const userIdDisplay = document.getElementById('user-id-display');
+
+        function switchView(viewName) {
+            Object.values(views).forEach(v => v.classList.add('hidden'));
+            if (views[viewName]) {
+                views[viewName].classList.remove('hidden');
+            }
+        }
+
+        function renderApp() {
+            if (currentCard) {
+                renderEditor();
+                switchView('editor');
+            } else {
+                renderTemplateSelector();
+                switchView('selector');
+            }
+        }
+
+        function renderTemplateSelector() {
+            savedCardsContainer.innerHTML = '';
+            if (savedCards.length > 0) {
+                savedCards.forEach(card => {
+                    const button = document.createElement('button');
+                    button.className = 'w-full text-left p-3 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors';
+                    button.textContent = card.name || 'Tarjeta sin nombre';
+                    button.onclick = () => handleLoadCard(card.id);
+                    savedCardsContainer.appendChild(button);
+                });
+            } else {
+                savedCardsContainer.innerHTML = '<p class="text-gray-500">No tienes tarjetas guardadas.</p>';
+            }
+        }
+
+        function renderEditor() {
+            cardNameInput.value = currentCard.name;
+            canvasContainer.style.backgroundColor = currentCard.backgroundColor;
+            renderCanvas();
+            renderPropertiesPanel();
+        }
+
+        function renderCanvas() {
+            canvas.innerHTML = '';
+            currentCard.components.forEach(component => {
+                const isSelected = component.id === selectedComponentId;
+                const wrapper = document.createElement('div');
+                wrapper.dataset.componentId = component.id;
+                
+                let elementHTML = '';
+                switch (component.type) {
+                    case 'heading':
+                        elementHTML = `<h2 class="text-2xl font-bold p-2 m-2 cursor-pointer break-words" style="color: ${component.properties.color || '#000000'}">${component.properties.text || 'Encabezado'}</h2>`;
+                        break;
+                    case 'text':
+                        elementHTML = `<p class="p-2 m-2 cursor-pointer break-words" style="color: ${component.properties.color || '#333333'}; font-size: ${component.properties.fontSize || 16}px;">${component.properties.text || 'Este es un párrafo de ejemplo.'}</p>`;
+                        break;
+                    case 'image':
+                        elementHTML = `<div class="p-2 m-2"><img src="${component.properties.src || 'https://placehold.co/400x200/e2e8f0/cbd5e0?text=Imagen'}" alt="${component.properties.alt || 'Imagen'}" class="w-full h-auto object-cover rounded-md cursor-pointer"></div>`;
+                        break;
+                    case 'button':
+                         elementHTML = `<div class="p-2 m-2"><button class="w-full font-bold py-2 px-4 rounded-lg cursor-pointer" style="background-color: ${component.properties.bgColor || '#3b82f6'}; color: ${component.properties.textColor || '#ffffff'}">${component.properties.text || 'Botón'}</button></div>`;
+                        break;
+                }
+                wrapper.innerHTML = elementHTML;
+                wrapper.className = `component-wrapper ${isSelected ? 'ring-2 ring-blue-500' : 'hover:ring-2 hover:ring-blue-200'}`;
+                canvas.appendChild(wrapper);
+            });
+        }
+        
+        function renderPropertiesPanel() {
+            const selectedComponent = currentCard?.components.find(c => c.id === selectedComponentId);
+            propertiesPanelContainer.innerHTML = '';
+
+            let content = '<h3 class="text-lg font-semibold mb-4">Propiedades</h3>';
+
+            if (selectedComponent) {
+                content += '<div class="mb-6 pb-6 border-b"><h4 class="font-semibold text-md mb-2">Propiedades del Componente</h4>';
+                
+                // Propiedades específicas del componente
+                switch(selectedComponent.type) {
+                    case 'heading':
+                    case 'button':
+                        content += createTextInput('text', 'Texto', selectedComponent.properties.text || '');
+                        if (selectedComponent.type === 'heading') {
+                             content += createColorInput('color', 'Color de Texto', selectedComponent.properties.color || '#000000');
+                        } else {
+                             content += createColorInput('bgColor', 'Color de Fondo', selectedComponent.properties.bgColor || '#3b82f6');
+                             content += createColorInput('textColor', 'Color de Texto', selectedComponent.properties.textColor || '#ffffff');
+                        }
+                        break;
+                    case 'text':
+                        content += createTextareaInput('text', 'Texto', selectedComponent.properties.text || '');
+                        content += createNumberInput('fontSize', 'Tamaño de Fuente (px)', selectedComponent.properties.fontSize || 16);
+                        content += createColorInput('color', 'Color', selectedComponent.properties.color || '#333333');
+                        break;
+                    case 'image':
+                        content += createTextInput('src', 'URL de la Imagen', selectedComponent.properties.src || '');
+                        content += createTextInput('alt', 'Texto Alternativo', selectedComponent.properties.alt || '');
+                        break;
+                }
+                
+                content += `<button id="delete-component-button" class="w-full mt-4 flex items-center justify-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">Eliminar</button></div>`;
+            } else {
+                 content += `<div class="text-center text-gray-500 mt-10"><p>Selecciona un componente para editar sus propiedades.</p></div>`;
+            }
+
+            // Propiedades de la tarjeta (siempre visibles)
+            content += '<div><h4 class="font-semibold text-md mb-2">Propiedades de la Tarjeta</h4>';
+            content += createColorInput('backgroundColor', 'Color de Fondo', currentCard.backgroundColor, true); // true for card property
+            content += '</div>';
+
+            propertiesPanelContainer.innerHTML = content;
+        }
+        
+        // --- HELPERS PARA CREAR INPUTS ---
+        function createTextInput(prop, label, value, isCardProp = false) {
+            const id = `prop-${prop}`;
+            return `<div class="space-y-1 mb-2">
+                        <label for="${id}" class="block text-sm font-medium text-gray-700">${label}</label>
+                        <input type="text" id="${id}" value="${value}" oninput="handlePropertyChange('${prop}', this.value, ${isCardProp})" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+                    </div>`;
+        }
+        function createTextareaInput(prop, label, value) {
+            const id = `prop-${prop}`;
+            return `<div class="space-y-1 mb-2">
+                        <label for="${id}" class="block text-sm font-medium text-gray-700">${label}</label>
+                        <textarea id="${id}" oninput="handlePropertyChange('${prop}', this.value)" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">${value}</textarea>
+                    </div>`;
+        }
+        function createNumberInput(prop, label, value) {
+            const id = `prop-${prop}`;
+            return `<div class="space-y-1 mb-2">
+                        <label for="${id}" class="block text-sm font-medium text-gray-700">${label}</label>
+                        <input type="number" id="${id}" value="${value}" oninput="handlePropertyChange('${prop}', this.value)" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+                    </div>`;
+        }
+        function createColorInput(prop, label, value, isCardProp = false) {
+            const id = `prop-${prop}`;
+            return `<div class="space-y-1 mb-2">
+                        <label for="${id}" class="block text-sm font-medium text-gray-700">${label}</label>
+                        <input type="color" id="${id}" value="${value}" oninput="handlePropertyChange('${prop}', this.value, ${isCardProp})" class="mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm">
+                    </div>`;
+        }
+        
+        // --- MANEJADORES DE EVENTOS ---
+        window.handleCreateNewCard = (template) => {
+            currentCard = {
+                id: null,
+                name: 'Nueva Tarjeta',
+                template: template,
+                components: [],
+                backgroundColor: '#ffffff'
+            };
+            selectedComponentId = null;
+            renderApp();
+        };
+
+        window.handleLoadCard = (cardId) => {
+            const cardToLoad = savedCards.find(c => c.id === cardId);
+            if (cardToLoad) {
+                currentCard = JSON.parse(JSON.stringify(cardToLoad)); // Deep copy
+                selectedComponentId = null;
+                renderApp();
+            }
+        };
+        
+        window.handleAddComponent = (type) => {
+            if (!currentCard) return;
+            const newComponent = { id: Date.now(), type, properties: {} };
+            currentCard.components.push(newComponent);
+            renderCanvas();
+        };
+
+        window.handlePropertyChange = (property, value, isCardProperty = false) => {
+            if (!currentCard) return;
+            if (isCardProperty) {
+                currentCard[property] = value;
+            } else {
+                const component = currentCard.components.find(c => c.id === selectedComponentId);
+                if (component) {
+                    component.properties[property] = value;
+                }
+            }
+            renderEditor();
+        };
+        
+        async function handleSaveCard() {
+            if (!db || !userId || !currentCard) {
+                alert("No se puede guardar. La base de datos no está conectada.");
+                return;
+            }
+            
+            const cardData = { ...currentCard };
+            const cardId = cardData.id;
+            delete cardData.id; // No guardar el ID dentro del documento
+
+            try {
+                if (cardId) {
+                    await setDoc(doc(db, `artifacts/${appId}/users/${userId}/cards`, cardId), cardData);
+                } else {
+                    const docRef = await addDoc(collection(db, `artifacts/${appId}/users/${userId}/cards`), cardData);
+                    currentCard.id = docRef.id; // Actualizar con el nuevo ID
+                }
+                alert("Tarjeta guardada con éxito!");
+            } catch (error) {
+                console.error("Error al guardar la tarjeta: ", error);
+                alert("Hubo un error al guardar la tarjeta.");
+            }
+        }
+        
+        function handleDeleteComponent() {
+            if (!currentCard || selectedComponentId === null) return;
+            currentCard.components = currentCard.components.filter(c => c.id !== selectedComponentId);
+            selectedComponentId = null;
+            renderApp();
+        }
+
+        // --- INICIALIZACIÓN ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inicializar Firebase
+            if (firebaseConfig.apiKey) {
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+
+                onAuthStateChanged(auth, user => {
+                    if (user) {
+                        userId = user.uid;
+                        userIdDisplay.textContent = userId;
+                        // Escuchar cambios en las tarjetas
+                        const cardsCollectionPath = `artifacts/${appId}/users/${userId}/cards`;
+                        const q = query(collection(db, cardsCollectionPath));
+                        onSnapshot(q, (querySnapshot) => {
+                            savedCards = [];
+                            querySnapshot.forEach((doc) => {
+                                savedCards.push({ id: doc.id, ...doc.data() });
+                            });
+                            renderApp(); // Re-renderizar con las tarjetas cargadas
+                        });
+                    } else {
+                        signInAnonymously(auth).catch(error => console.error("Error signing in anonymously:", error));
+                    }
+                });
+            } else {
+                console.log("Configuración de Firebase no encontrada.");
+                userIdDisplay.textContent = "Desconectado";
+                savedCardsContainer.innerHTML = '<p class="text-gray-500">La persistencia está deshabilitada.</p>';
+            }
+            
+            // Poblar panel de componentes
+            const addComponentsPanel = document.getElementById('add-components-panel');
+            Object.keys(COMPONENT_TYPES).forEach(type => {
+                const info = COMPONENT_TYPES[type];
+                const button = document.createElement('button');
+                button.className = 'w-full flex items-center gap-3 p-3 rounded-lg bg-gray-100 hover:bg-gray-200';
+                button.innerHTML = `${info.icon} <span>${info.name}</span>`;
+                button.onclick = () => handleAddComponent(type);
+                addComponentsPanel.appendChild(button);
+            });
+
+            // Asignar event listeners
+            document.getElementById('back-button').onclick = () => {
+                currentCard = null;
+                renderApp();
+            };
+            document.getElementById('save-button').onclick = handleSaveCard;
+            cardNameInput.oninput = (e) => {
+                if(currentCard) currentCard.name = e.target.value;
+            };
+            canvas.addEventListener('click', (e) => {
+                const componentWrapper = e.target.closest('.component-wrapper');
+                if (componentWrapper) {
+                    selectedComponentId = parseInt(componentWrapper.dataset.componentId, 10);
+                    renderEditor();
+                }
+            });
+            propertiesPanelContainer.addEventListener('click', (e) => {
+                if (e.target.id === 'delete-component-button') {
+                    handleDeleteComponent();
+                }
+            });
+
+            // Renderizado inicial
+            renderApp();
+        });
+    </script>
+</body>
+</html>

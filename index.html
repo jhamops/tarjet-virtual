@@ -12,30 +12,37 @@
         /* Estilos personalizados */
         body {
             font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         .hidden {
             display: none;
         }
         .hero-gradient {
-            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+            background: #000000;
         }
-        .faq-item .faq-answer {
-            display: none;
-            transition: max-height 0.3s ease-out;
+        .feature-gradient {
+             background: linear-gradient(180deg, #111827 0%, #000000 100%);
         }
-        .faq-item.open .faq-answer {
-            display: block;
-        }
-        .faq-item.open .faq-icon {
-            transform: rotate(180deg);
+        .globe-bg {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            width: 70%;
+            height: 140%;
+            transform: translateY(-50%);
+            background-image: radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+            mask-image: radial-gradient(ellipse 50% 50% at 100% 50%, black 40%, transparent 75%);
+            pointer-events: none;
         }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-200">
+<body class="bg-black text-gray-200">
 
     <!-- Landing Page -->
     <main id="landing-page-view">
-        <header class="bg-gray-900/80 backdrop-blur-md shadow-lg shadow-blue-500/5 sticky top-0 z-50">
+        <header class="bg-black/80 backdrop-blur-md shadow-lg shadow-blue-500/5 sticky top-0 z-50">
             <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
                 <div class="text-2xl font-bold text-white">LinkUpCard</div>
                 <button id="start-creating-btn-nav" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
@@ -45,38 +52,77 @@
         </header>
 
         <!-- Hero Section -->
-        <section class="text-center py-24 px-6 hero-gradient">
-            <div class="container mx-auto">
-                <h1 class="text-5xl md:text-6xl font-extrabold mb-4 leading-tight text-white">La Tarjeta de Presentación del Futuro, Hoy.</h1>
-                <p class="text-xl text-gray-400 mb-8 max-w-3xl mx-auto">Crea, comparte y gestiona tus contactos de networking de forma inteligente. Nunca más pierdas una oportunidad.</p>
-                <button id="start-creating-btn-hero" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-blue-700 transition-transform transform hover:scale-105">
-                    Crea tu Tarjeta Gratis
-                </button>
-                <div class="mt-16 flex justify-center">
-                    <!-- Phone Mockup -->
+        <section class="pt-24 pb-12 px-6 hero-gradient">
+            <div class="container mx-auto grid md:grid-cols-2 gap-8 items-center">
+                <div class="text-center md:text-left">
+                    <h1 class="text-5xl md:text-6xl font-extrabold mb-4 leading-tight text-white">Tu Red de Contactos, Reimaginada.</h1>
+                    <p class="text-xl text-gray-400 mb-8 max-w-xl">La plataforma todo-en-uno para crear tarjetas digitales, escanear contactos y construir relaciones duraderas.</p>
+                    <button id="start-creating-btn-hero" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-blue-700 transition-transform transform hover:scale-105">
+                        Crea tu Tarjeta Gratis
+                    </button>
+                </div>
+                <div class="relative h-[400px] md:h-[500px]">
+                    <!-- Card Mockups -->
+                    <div class="absolute w-[220px] h-auto bg-white rounded-xl shadow-2xl p-4 top-1/2 left-1/2 -translate-x-[85%] -translate-y-[60%] rotate-[-15deg]">
+                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=1780&auto=format&fit=crop" class="w-16 h-16 rounded-full mx-auto mb-2 border-2 border-blue-500">
+                        <p class="text-center font-bold text-gray-800">Alex Thompson</p>
+                        <p class="text-center text-sm text-gray-500">Product Manager</p>
+                    </div>
+                    <div class="absolute w-[250px] h-auto bg-gray-800 rounded-2xl shadow-2xl p-5 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+                        <div class="flex items-center gap-4 mb-4">
+                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop" class="w-16 h-16 rounded-full object-cover border-2 border-white">
+                            <div>
+                                <p class="font-bold text-white">Sophia Kub</p>
+                                <p class="text-sm text-gray-400">Marketing Director</p>
+                            </div>
+                        </div>
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=example&bgcolor=1f2937&color=ffffff" class="w-full rounded-lg">
+                    </div>
+                    <div class="absolute w-[220px] h-auto bg-white rounded-xl shadow-2xl p-4 top-1/2 left-1/2 -translate-x-[15%] -translate-y-[40%] rotate-[15deg]">
+                        <div class="bg-blue-500 h-16 rounded-t-lg"></div>
+                        <p class="text-center font-bold text-gray-800 mt-2">Brightwave</p>
+                        <p class="text-center text-sm text-gray-500">Agencia de Marketing</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- New Feature Section from Image -->
+        <section class="py-24 px-6 bg-black">
+            <div class="container mx-auto grid md:grid-cols-2 gap-16 items-center">
+                 <div class="md:order-2">
+                    <span class="text-blue-400 font-semibold">CAPTURA DE LEADS</span>
+                    <h3 class="text-4xl font-bold mt-2 mb-4 text-white">Amplía tu red: captura clientes potenciales.</h3>
+                    <p class="text-gray-400 text-lg">Con nuestros formularios integrados en tu tarjeta digital, captura la información de contacto de tus prospectos sobre la marcha. Sin interrupciones y en solo unos clics.</p>
+                </div>
+                <div class="md:order-1 flex justify-center">
+                     <!-- Phone Mockup -->
                     <div class="w-full max-w-sm">
                         <div class="relative mx-auto border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[600px] w-[300px] shadow-2xl shadow-blue-500/20">
                             <div class="w-[148px] h-[18px] bg-gray-800 top-0 rounded-b-[1rem] left-1/2 -translate-x-1/2 absolute"></div>
                             <div class="h-[46px] w-[3px] bg-gray-800 absolute -left-[17px] top-[72px] rounded-l-lg"></div>
                             <div class="h-[46px] w-[3px] bg-gray-800 absolute -left-[17px] top-[124px] rounded-l-lg"></div>
                             <div class="h-[64px] w-[3px] bg-gray-800 absolute -right-[17px] top-[142px] rounded-r-lg"></div>
-                            <div class="rounded-[2rem] overflow-hidden w-full h-full bg-gray-50">
-                                <!-- Contenido de la tarjeta dentro del mockup -->
-                                <div class="bg-blue-500 h-28 relative">
-                                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop" class="w-24 h-24 rounded-full object-cover border-4 border-white absolute -bottom-12 left-1/2 -translate-x-1/2">
-                                </div>
-                                <div class="pt-16 p-4 text-center">
-                                    <h2 class="text-xl font-bold text-gray-800">Sophia Kub</h2>
-                                    <p class="text-gray-500 text-sm">Marketing Director en Brightwave</p>
-                                </div>
-                                <div class="px-6 pb-4 space-y-3">
-                                    <a href="#" class="w-full text-center block font-bold py-3 px-4 rounded-lg bg-blue-600 text-white">Guardar Contacto</a>
-                                    <div class="flex justify-center gap-5 p-2">
-                                        <svg class="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-                                        <svg class="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-.424.727-.666 1.581-.666 2.477 0 1.69.86 3.178 2.158 4.049-.802-.026-1.55-.248-2.2-.608v.064c0 2.358 1.678 4.322 3.898 4.774-.407.111-.838.171-1.28.171-.314 0-.618-.031-.926-.087.618 1.932 2.413 3.338 4.545 3.375-1.667 1.305-3.772 2.085-6.053 2.085-.394 0-.782-.023-1.164-.067 2.153 1.386 4.703 2.193 7.423 2.193 8.907 0 13.788-7.373 13.788-13.788 0-.21 0-.419-.014-.627.947-.684 1.77-1.536 2.427-2.517z"/></svg>
-                                        <svg class="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                            <div class="rounded-[2rem] overflow-hidden w-full h-full bg-gray-50 text-gray-800 p-4">
+                                <h3 class="font-bold text-center mb-4">Intercambiar Contacto</h3>
+                                <div class="space-y-3">
+                                    <div>
+                                        <label class="text-xs text-gray-500">Nombre Completo</label>
+                                        <input type="text" class="w-full p-2 rounded bg-gray-200 border border-gray-300">
                                     </div>
-                                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=example" class="mx-auto">
+                                     <div>
+                                        <label class="text-xs text-gray-500">Email</label>
+                                        <input type="email" class="w-full p-2 rounded bg-gray-200 border border-gray-300">
+                                    </div>
+                                     <div>
+                                        <label class="text-xs text-gray-500">Teléfono</label>
+                                        <input type="tel" class="w-full p-2 rounded bg-gray-200 border border-gray-300">
+                                    </div>
+                                     <div>
+                                        <label class="text-xs text-gray-500">Empresa</label>
+                                        <input type="text" class="w-full p-2 rounded bg-gray-200 border border-gray-300">
+                                    </div>
+                                    <button class="w-full bg-blue-600 text-white font-bold py-2 rounded-lg">Enviar</button>
                                 </div>
                             </div>
                         </div>
@@ -85,78 +131,98 @@
             </div>
         </section>
 
-        <!-- How it works Section -->
-        <section class="py-20 px-6 bg-gray-900">
-            <div class="container mx-auto text-center">
-                <h2 class="text-4xl font-bold text-white mb-12">Networking en 3 Simples Pasos</h2>
-                <div class="grid md:grid-cols-3 gap-12">
-                    <div class="p-6">
-                        <div class="text-3xl font-bold text-blue-500 mb-4">01</div>
-                        <h3 class="text-xl font-bold text-white mb-2">Crea tu Perfil</h3>
-                        <p class="text-gray-400">Diseña tu tarjeta digital en segundos con tu información de contacto y redes sociales.</p>
+        <!-- Features Section (2-column) -->
+        <section class="py-24 px-6 feature-gradient">
+            <div class="container mx-auto space-y-24">
+                <div class="grid md:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <span class="text-blue-400 font-semibold">TARJETAS DIGITALES</span>
+                        <h3 class="text-4xl font-bold mt-2 mb-4 text-white">Una Tarjeta Para Gobernarlas a Todas</h3>
+                        <p class="text-gray-400 text-lg">Crea una tarjeta de presentación digital que siempre está actualizada. Comparte tu información de contacto, redes sociales, y más, con un simple escaneo de QR.</p>
                     </div>
-                    <div class="p-6">
-                        <div class="text-3xl font-bold text-blue-500 mb-4">02</div>
-                        <h3 class="text-xl font-bold text-white mb-2">Comparte con QR</h3>
-                        <p class="text-gray-400">Comparte tu perfil al instante con tu código QR personal. La otra persona no necesita la app.</p>
-                    </div>
-                    <div class="p-6">
-                        <div class="text-3xl font-bold text-blue-500 mb-4">03</div>
-                        <h3 class="text-xl font-bold text-white mb-2">Gestiona tus Contactos</h3>
-                        <p class="text-gray-400">Escanea tarjetas físicas con OCR y organiza todos tus contactos en un solo lugar.</p>
+                    <div>
+                        <img src="https://images.unsplash.com/photo-1634496994033-803a69732481?q=80&w=1887&auto=format&fit=crop" class="rounded-xl shadow-lg" alt="Persona mostrando un código QR en su teléfono">
                     </div>
                 </div>
-            </div>
-        </section>
-        
-        <!-- Features Section (2-column) -->
-        <section class="py-20 px-6 bg-gray-800">
-            <div class="container mx-auto space-y-20">
-                <div class="grid md:grid-cols-2 gap-12 items-center">
-                    <div>
-                        <span class="text-blue-400 font-semibold">ESCANEO INTELIGENTE</span>
-                        <h3 class="text-4xl font-bold mt-2 mb-4 text-white">Di Adiós a la Entrada Manual</h3>
-                        <p class="text-gray-400">Nuestra tecnología OCR lee las tarjetas de presentación por ti. Simplemente apunta tu cámara, escanea y LinkUpCard se encarga de crear el contacto digital, sin errores.</p>
+
+                <div class="grid md:grid-cols-2 gap-16 items-center">
+                    <div class="md:order-2">
+                        <span class="text-blue-400 font-semibold">ESCANEO OCR</span>
+                        <h3 class="text-4xl font-bold mt-2 mb-4 text-white">Digitaliza tu Mundo</h3>
+                        <p class="text-gray-400 text-lg">Nuestra tecnología OCR lee las tarjetas de papel por ti. Simplemente apunta tu cámara, escanea y LinkUpCard se encarga de crear el contacto digital, sin errores.</p>
                     </div>
-                    <div>
+                    <div class="md:order-1">
                         <img src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?q=80&w=2070&auto=format&fit=crop" class="rounded-xl shadow-lg" alt="Escaneo OCR de una tarjeta">
                     </div>
                 </div>
-
-                <div class="grid md:grid-cols-2 gap-12 items-center">
-                    <div class="md:order-2">
-                        <span class="text-blue-400 font-semibold">ORGANIZACIÓN TOTAL</span>
-                        <h3 class="text-4xl font-bold mt-2 mb-4 text-white">Tus Contactos, a tu Manera</h3>
-                        <p class="text-gray-400">Añade etiquetas, notas y recordatorios a cada contacto. Filtra por evento, ciudad o interés para encontrar a la persona que buscas en el momento que la necesitas.</p>
-                    </div>
-                    <div class="md:order-1">
-                        <img src="https://images.unsplash.com/photo-1556155092-490a1ba16284?q=80&w=2070&auto=format&fit=crop" class="rounded-xl shadow-lg" alt="Organización de contactos en la app">
-                    </div>
-                </div>
             </div>
         </section>
 
-        <!-- Integrations Section -->
-        <section class="py-20 px-6 bg-gray-900">
+        <!-- Plans Section -->
+        <section class="py-24 px-6 bg-black">
             <div class="container mx-auto text-center">
-                <h2 class="text-4xl font-bold text-white mb-4">Se Integra con tus Herramientas Favoritas</h2>
-                <p class="text-gray-400 mb-12 max-w-2xl mx-auto">Exporta tus nuevos contactos a los sistemas que ya usas, manteniendo tu flujo de trabajo intacto.</p>
-                <div class="flex flex-wrap justify-center items-center gap-x-8 gap-y-4 text-gray-400">
-                    <span class="font-semibold text-xl">Google Contacts</span>
-                    <span class="font-semibold text-xl">Outlook</span>
-                    <span class="font-semibold text-xl">HubSpot</span>
-                    <span class="font-semibold text-xl">Salesforce</span>
-                    <span class="font-semibold text-xl">Zapier</span>
+                <h2 class="text-4xl font-bold text-white mb-4">Comienza Contigo</h2>
+                <p class="text-gray-400 mb-12 max-w-2xl mx-auto">Ya sea para ti o para tu empresa, LinkUpCard tiene un plan que se ajusta a tus necesidades.</p>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="bg-gray-800 p-8 rounded-lg border border-gray-700">
+                        <h3 class="text-2xl font-bold text-white mb-2">Personal</h3>
+                        <p class="text-gray-400 mb-6">Para compartir con amigos, familia y conexiones personales.</p>
+                        <button class="w-full bg-gray-700 text-white font-bold py-2 rounded-lg hover:bg-gray-600">Saber Más</button>
+                    </div>
+                     <div class="bg-gray-800 p-8 rounded-lg border border-gray-700">
+                        <h3 class="text-2xl font-bold text-white mb-2">Profesional</h3>
+                        <p class="text-gray-400 mb-6">Para individuos que buscan crecer su marca y expandir su alcance.</p>
+                        <button class="w-full bg-gray-700 text-white font-bold py-2 rounded-lg hover:bg-gray-600">Saber Más</button>
+                    </div>
+                     <div class="bg-gray-800 p-8 rounded-lg border border-gray-700">
+                        <h3 class="text-2xl font-bold text-white mb-2">Business</h3>
+                        <p class="text-gray-400 mb-6">Para equipos de 5-100 usuarios que quieren un lanzamiento rápido y con marca.</p>
+                        <button class="w-full bg-gray-700 text-white font-bold py-2 rounded-lg hover:bg-gray-600">Saber Más</button>
+                    </div>
+                     <div class="bg-gray-800 p-8 rounded-lg border border-blue-500">
+                        <h3 class="text-2xl font-bold text-white mb-2">Enterprise</h3>
+                        <p class="text-gray-400 mb-6">Para organizaciones con más de 101 usuarios listas para automatizar y escalar.</p>
+                        <button class="w-full bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700">Saber Más</button>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- FAQ Section -->
-        <section class="py-20 px-6 bg-gray-800">
-            <div class="container mx-auto max-w-3xl">
-                <h2 class="text-4xl font-bold text-white text-center mb-12">Preguntas Frecuentes</h2>
-                <div class="space-y-4" id="faq-container">
-                    <!-- Las preguntas se insertarán aquí con JS -->
+        <!-- Testimonials Section -->
+        <section class="py-24 px-6 feature-gradient">
+            <div class="container mx-auto max-w-5xl text-center">
+                <h2 class="text-4xl font-bold text-white mb-12">Lo que dicen nuestros usuarios</h2>
+                <div class="grid md:grid-cols-2 gap-8 text-left">
+                    <div class="bg-gray-800 p-8 rounded-lg">
+                        <p class="text-gray-300 mb-4">"LinkUpCard ha cambiado por completo cómo nuestro equipo de ventas gestiona los leads de eventos. Es indispensable."</p>
+                        <div class="font-bold text-white">Ana García</div>
+                        <div class="text-sm text-gray-400">Directora de Ventas, TechCorp</div>
+                    </div>
+                    <div class="bg-gray-800 p-8 rounded-lg">
+                        <p class="text-gray-300 mb-4">"La mejor parte es la facilidad para compartir mi contacto. El código QR funciona a la perfección y la gente queda impresionada."</p>
+                        <div class="font-bold text-white">Carlos Mendoza</div>
+                        <div class="text-sm text-gray-400">Consultor Freelance</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Enterprise Section -->
+        <section class="py-24 px-6 bg-black relative overflow-hidden global">
+            <div class="globe-bg"></div>
+            <div class="container mx-auto max-w-5xl relative z-10">
+                <div class="grid md:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <span class="text-blue-400 font-semibold">ENTERPRISE</span>
+                        <h3 class="text-4xl font-bold mt-2 mb-4 text-white">La Elección #1 para Empresas a Nivel Mundial</h3>
+                        <p class="text-gray-400 text-lg mb-8">LinkUpCard es la plataforma de tarjetas de visita digitales más grande del mundo y la principal solución para grandes empresas. Con más de 8 millones de tarjetas en todo el mundo, seguimos marcando el estándar para implementaciones a gran escala.</p>
+                        <div class="flex flex-wrap items-center gap-x-8 gap-y-4 text-gray-500">
+                            <span class="font-bold text-xl">AIA</span>
+                            <span class="font-bold text-xl">parexel</span>
+                            <span class="font-bold text-xl">Stantec</span>
+                            <span class="font-bold text-xl">pwc</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -172,7 +238,7 @@
             </div>
         </section>
 
-        <footer class="text-center py-6 bg-gray-900 text-gray-400">
+        <footer class="text-center py-6 bg-black text-gray-400">
             <p>&copy; 2025 LinkUpCard. Todos los derechos reservados.</p>
         </footer>
     </main>
@@ -600,37 +666,8 @@
                 }
             });
 
-            // FAQ Logic
-            const faqs = [
-                { question: '¿La otra persona necesita tener LinkUpCard para recibir mi tarjeta?', answer: 'No. Tu tarjeta digital se puede compartir a través de un código QR o un enlace. Cualquiera con un smartphone puede escanear el QR y ver tu perfil en su navegador, sin necesidad de instalar nada.' },
-                { question: '¿Mis datos de contacto están seguros?', answer: 'Sí. La seguridad es nuestra máxima prioridad. Todos tus datos se almacenan de forma segura y tienes control total sobre qué información compartes en tu perfil público.' },
-                { question: '¿Puedo tener diferentes tarjetas para diferentes situaciones?', answer: '¡Absolutamente! Puedes crear múltiples perfiles (por ejemplo, uno para el trabajo y otro personal) y elegir cuál compartir en cada momento.' },
-                { question: '¿Cómo funciona el escaneo de tarjetas físicas?', answer: 'Nuestra app utiliza tecnología de Reconocimiento Óptico de Caracteres (OCR). Simplemente tomas una foto de la tarjeta de papel y la app extrae automáticamente el texto (nombre, empresa, teléfono, etc.) y lo convierte en un contacto digital.' }
-            ];
-            const faqContainer = document.getElementById('faq-container');
-            faqs.forEach(faq => {
-                const item = document.createElement('div');
-                item.className = 'faq-item bg-gray-700/50 rounded-lg';
-                item.innerHTML = `
-                    <button class="faq-question w-full flex justify-between items-center text-left p-4">
-                        <span class="text-lg font-semibold text-white">${faq.question}</span>
-                        <svg class="faq-icon w-6 h-6 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </button>
-                    <div class="faq-answer px-4 pb-4 text-gray-400">
-                        ${faq.answer}
-                    </div>
-                `;
-                faqContainer.appendChild(item);
-            });
-
-            faqContainer.addEventListener('click', (e) => {
-                const questionButton = e.target.closest('.faq-question');
-                if (questionButton) {
-                    const item = questionButton.parentElement;
-                    item.classList.toggle('open');
-                }
-            });
-
+            // FAQ Logic is removed as it's not in the new design based on haystack
+            // ...
 
             switchView('landing');
         });

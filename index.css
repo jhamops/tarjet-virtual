@@ -1,0 +1,34 @@
+        /* Estilos personalizados */
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .hidden {
+            display: none;
+        }
+        .hero-gradient {
+            background: #000000;
+        }
+        .feature-gradient {
+             background: linear-gradient(180deg, #111827 0%, #000000 100%);
+        }
+        .globe-bg {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            width: 70%;
+            height: 140%;
+            transform: translateY(-50%);
+            background-image: radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+            mask-image: radial-gradient(ellipse 50% 50% at 100% 50%, black 40%, transparent 75%);
+            pointer-events: none;
+        }
+
+        .global {
+    background-image: url('./imagenes/backgound-black.jpg') !important; /* o './imagenes/fondo.png' */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}

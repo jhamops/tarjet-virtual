@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Constructor de Tarjetas Visuales</title>
+    <title>LinkUpCard - Constructor de Tarjetas Visuales</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Estilos personalizados y para iconos */
+        /* Estilos personalizados */
         body {
             font-family: 'Inter', sans-serif;
         }
@@ -31,34 +31,142 @@
         }
     </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-50 text-gray-800">
 
-    <!-- Vista de Selección de Plantilla -->
-    <div id="template-selector-view" class="min-h-screen flex flex-col items-center justify-center p-4">
+    <!-- Landing Page -->
+    <main id="landing-page-view">
+        <header class="bg-white shadow-sm sticky top-0 z-50">
+            <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+                <div class="text-2xl font-bold text-blue-600">LinkUpCard</div>
+                <button id="start-creating-btn-nav" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                    Empezar a Crear
+                </button>
+            </nav>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="text-center py-20 px-6 bg-white">
+            <h1 class="text-5xl font-bold mb-4">Moderniza tu Networking con Tarjetas Digitales Inteligentes</h1>
+            <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">La solución integral para crear perfiles digitales, escanear tarjetas físicas con OCR y organizar tus contactos de forma eficiente.</p>
+            <button id="start-creating-btn-hero" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-blue-700 transition-transform transform hover:scale-105">
+                Comienza Gratis
+            </button>
+        </section>
+
+        <!-- Problema Section -->
+        <section class="py-20 px-6 bg-gray-50">
+            <div class="container mx-auto text-center">
+                <h2 class="text-3xl font-bold mb-4">El Networking Tradicional Está Roto</h2>
+                <p class="text-lg text-gray-600 mb-12 max-w-2xl mx-auto">Las herramientas actuales no están a la altura de un mundo digital y dinámico.</p>
+                <div class="grid md:grid-cols-3 gap-10">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Tarjetas Olvidadas</h3>
+                        <p class="text-gray-600">Las tarjetas físicas se pierden o quedan olvidadas después de los eventos, perdiendo oportunidades valiosas.</p>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Registro Ineficiente</h3>
+                        <p class="text-gray-600">El registro manual de contactos es lento, tedioso y muy propenso a errores de transcripción.</p>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Falta de Seguimiento</h3>
+                        <p class="text-gray-600">El networking actual carece de herramientas efectivas para dar seguimiento y cultivar las nuevas relaciones.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Solución Section -->
+        <section class="py-20 px-6 bg-white">
+            <div class="container mx-auto">
+                <h2 class="text-3xl font-bold text-center mb-12">Nuestra Solución Integral</h2>
+                <div class="grid md:grid-cols-3 gap-10">
+                    <div class="text-center p-6">
+                        <div class="text-blue-500 mb-4 inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8z"></path><path d="M12 12v-1"></path></svg></div>
+                        <h3 class="text-xl font-bold mb-2">Tarjetas Virtuales</h3>
+                        <p class="text-gray-600">Crea perfiles y tarjetas virtuales personalizadas con tu información actualizable en tiempo real a través de un QR personal.</p>
+                    </div>
+                    <div class="text-center p-6">
+                        <div class="text-blue-500 mb-4 inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.58 16.09l-1.09-7.66A5 5 0 0 0 15.57 4H8.43a5 5 0 0 0-4.92 4.43l-1.09 7.66a2 2 0 0 0 1.98 2.34h13.2a2 2 0 0 0 1.98-2.34z"></path><line x1="12" y1="4" x2="12" y2="18"></line></svg></div>
+                        <h3 class="text-xl font-bold mb-2">Escaneo OCR</h3>
+                        <p class="text-gray-600">Escanea tarjetas físicas, convierte los datos a formato digital automáticamente y olvídate de la entrada manual.</p>
+                    </div>
+                    <div class="text-center p-6">
+                        <div class="text-blue-500 mb-4 inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
+                        <h3 class="text-xl font-bold mb-2">Organización Inteligente</h3>
+                        <p class="text-gray-600">Organiza tus contactos con etiquetas por evento, interés o ciudad. Usa la búsqueda rápida para encontrarlos al instante.</p>
+                    </div>
+                    <div class="text-center p-6">
+                        <div class="text-blue-500 mb-4 inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></div>
+                        <h3 class="text-xl font-bold mb-2">Seguimiento con IA</h3>
+                        <p class="text-gray-600">Recibe recordatorios y acciones sugeridas por IA para no dejar enfriar ninguna conexión importante.</p>
+                    </div>
+                     <div class="text-center p-6">
+                        <div class="text-blue-500 mb-4 inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
+                        <h3 class="text-xl font-bold mb-2">Grupos y Chats</h3>
+                        <p class="text-gray-600">Crea grupos temáticos y mantén la conversación activa con los chats internos de la aplicación.</p>
+                    </div>
+                     <div class="text-center p-6">
+                        <div class="text-blue-500 mb-4 inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="m9 12 2 2 4-4"></path></svg></div>
+                        <h3 class="text-xl font-bold mb-2">Gamificación</h3>
+                        <p class="text-gray-600">Gana puntos e insignias por tu actividad de networking y compite en rankings durante los eventos.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Casos de Uso Section -->
+        <section class="py-20 px-6 bg-gray-50">
+            <div class="container mx-auto">
+                <h2 class="text-3xl font-bold text-center mb-12">Ideal para Profesionales y Eventos</h2>
+                <div class="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                    <div class="p-4 bg-white rounded-lg shadow-sm">
+                        <p class="font-semibold">Eventos Tecnológicos</p>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg shadow-sm">
+                        <p class="font-semibold">Conferencias y Ferias</p>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg shadow-sm">
+                        <p class="font-semibold">Equipos de Ventas</p>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg shadow-sm">
+                        <p class="font-semibold">Coworkings</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center py-6 bg-gray-800 text-white">
+            <p>&copy; 2025 LinkUpCard. Todos los derechos reservados.</p>
+        </footer>
+    </main>
+
+    <!-- Vista de Selección de Plantilla (App) -->
+    <div id="template-selector-view" class="hidden min-h-screen flex flex-col items-center justify-center p-4 bg-gray-100">
+         <button id="home-button" class="absolute top-4 left-4 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">← Volver a Inicio</button>
         <div class="w-full max-w-4xl">
-            <h1 class="text-4xl font-bold text-center text-gray-800 mb-2">Constructor de Tarjetas Visuales</h1>
-            <p class="text-center text-gray-600 mb-8">Elige una plantilla para empezar o carga una tarjeta guardada.</p>
+            <h1 class="text-4xl font-bold text-center text-gray-800 mb-2">Crea tu Perfil Digital LinkUpCard</h1>
+            <p class="text-center text-gray-600 mb-8 max-w-2xl mx-auto">Tu tarjeta de presentación digital, siempre actualizada. Elige una plantilla para empezar o carga un perfil existente.</p>
             
             <div class="grid md:grid-cols-2 gap-8 mb-12">
                 <div class="bg-white p-6 rounded-xl shadow-md">
-                    <h2 class="text-2xl font-semibold mb-4 text-gray-700">Crear Nueva Tarjeta</h2>
-                    <p class="text-gray-500 mb-4">Selecciona una estructura inicial.</p>
+                    <h2 class="text-2xl font-semibold mb-4 text-gray-700">Crear Nuevo Perfil</h2>
+                    <p class="text-gray-500 mb-4">Selecciona un diseño base para tu tarjeta.</p>
                     <div class="space-y-4">
                         <button onclick="handleCreateNewCard('single-column')" class="w-full text-left p-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
-                            <span class="font-bold">Columna Única</span>
-                            <p class="text-sm text-blue-100">Ideal para perfiles o anuncios simples.</p>
+                            <span class="font-bold">Perfil Clásico</span>
+                            <p class="text-sm text-blue-100">Un diseño limpio y directo para tu información esencial.</p>
                         </button>
                         <button onclick="handleCreateNewCard('image-header')" class="w-full text-left p-4 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
-                            <span class="font-bold">Encabezado de Imagen</span>
-                            <p class="text-sm text-green-100">Perfecta para artículos o tarjetas de producto.</p>
+                            <span class="font-bold">Perfil con Banner</span>
+                            <p class="text-sm text-green-100">Destaca tu marca personal o empresa con una imagen de cabecera.</p>
                         </button>
                     </div>
                 </div>
 
                 <div class="bg-white p-6 rounded-xl shadow-md">
-                    <h2 class="text-2xl font-semibold mb-4 text-gray-700">Mis Tarjetas Guardadas</h2>
+                    <h2 class="text-2xl font-semibold mb-4 text-gray-700">Mis Perfiles Guardados</h2>
                     <div id="saved-cards-container" class="space-y-2 max-h-60 overflow-y-auto">
-                        <p class="text-gray-500">Cargando tarjetas...</p>
+                        <p class="text-gray-500">Cargando perfiles...</p>
                     </div>
                 </div>
             </div>
@@ -68,59 +176,44 @@
         </div>
     </div>
 
-    <!-- Vista del Editor Principal -->
+    <!-- Vista del Editor Principal (App) -->
     <div id="editor-view" class="hidden flex flex-col h-screen font-sans bg-gray-50">
         <header class="flex items-center justify-between p-2 bg-white border-b shadow-sm">
             <button id="back-button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">← Volver</button>
-            <input type="text" id="card-name-input" class="text-lg font-semibold border-b-2 border-transparent focus:border-blue-500 outline-none mx-4 flex-grow"/>
+            <input type="text" id="card-name-input" class="text-lg font-semibold border-b-2 border-transparent focus:border-blue-500 outline-none mx-4 flex-grow" placeholder="Nombre de tu Perfil"/>
             <button id="save-button" class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-                Guardar
+                Guardar Perfil
             </button>
         </header>
         <div class="flex flex-grow overflow-hidden">
-            <!-- Panel de Componentes -->
             <aside class="w-60 bg-white p-4 border-r overflow-y-auto">
                 <h3 class="text-lg font-semibold mb-4">Añadir Componentes</h3>
-                <div id="add-components-panel" class="space-y-2">
-                    <!-- Los botones para añadir componentes se insertarán aquí -->
-                </div>
+                <div id="add-components-panel" class="space-y-2"></div>
             </aside>
-
-            <!-- Lienzo Principal -->
             <main class="flex-1 p-8 overflow-y-auto bg-gray-200 flex justify-center items-start">
                 <div id="canvas-container" class="w-full max-w-md rounded-xl shadow-lg transition-all">
-                    <div id="canvas" class="p-4">
-                        <!-- Los componentes de la tarjeta se renderizarán aquí -->
-                    </div>
+                    <div id="canvas" class="p-4"></div>
                 </div>
             </main>
-
-            <!-- Panel de Propiedades -->
-            <aside id="properties-panel-container" class="w-80 bg-white p-4 border-l overflow-y-auto">
-                 <!-- El panel de propiedades se renderizará aquí -->
-            </aside>
+            <aside id="properties-panel-container" class="w-80 bg-white p-4 border-l overflow-y-auto"></aside>
         </div>
     </div>
 
     <script type="module">
-        // --- IMPORTACIONES DE FIREBASE ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, doc, addDoc, setDoc, onSnapshot, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // --- CONFIGURACIÓN DE FIREBASE ---
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
-        // --- ESTADO DE LA APLICACIÓN ---
         let db, auth;
         let userId = null;
         let currentCard = null;
         let savedCards = [];
         let selectedComponentId = null;
         
-        // --- DEFINICIÓN DE COMPONENTES ---
         const COMPONENT_TYPES = {
             heading: { name: 'Encabezado', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v7a6 6 0 0 0 6 6 6 6 0 0 0 6-6V3"></path><line x1="4" y1="21" x2="20" y2="21"></line></svg>' },
             text: { name: 'Texto', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>' },
@@ -128,9 +221,8 @@
             button: { name: 'Botón', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8z"></path><path d="M12 12v-1"></path></svg>' },
         };
 
-        // --- MANEJO DEL DOM Y RENDERIZADO ---
-        
         const views = {
+            landing: document.getElementById('landing-page-view'),
             selector: document.getElementById('template-selector-view'),
             editor: document.getElementById('editor-view'),
         };
@@ -164,12 +256,12 @@
                 savedCards.forEach(card => {
                     const button = document.createElement('button');
                     button.className = 'w-full text-left p-3 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors';
-                    button.textContent = card.name || 'Tarjeta sin nombre';
+                    button.textContent = card.name || 'Perfil sin nombre';
                     button.onclick = () => handleLoadCard(card.id);
                     savedCardsContainer.appendChild(button);
                 });
             } else {
-                savedCardsContainer.innerHTML = '<p class="text-gray-500">No tienes tarjetas guardadas.</p>';
+                savedCardsContainer.innerHTML = '<p class="text-gray-500">No tienes perfiles guardados.</p>';
             }
         }
 
@@ -190,16 +282,16 @@
                 let elementHTML = '';
                 switch (component.type) {
                     case 'heading':
-                        elementHTML = `<h2 class="text-2xl font-bold p-2 m-2 cursor-pointer break-words" style="color: ${component.properties.color || '#000000'}">${component.properties.text || 'Encabezado'}</h2>`;
+                        elementHTML = `<h2 class="text-2xl font-bold p-2 m-2 cursor-pointer break-words" style="color: ${component.properties.color || '#000000'}">${component.properties.text || 'Tu Nombre'}</h2>`;
                         break;
                     case 'text':
-                        elementHTML = `<p class="p-2 m-2 cursor-pointer break-words" style="color: ${component.properties.color || '#333333'}; font-size: ${component.properties.fontSize || 16}px;">${component.properties.text || 'Este es un párrafo de ejemplo.'}</p>`;
+                        elementHTML = `<p class="p-2 m-2 cursor-pointer break-words" style="color: ${component.properties.color || '#333333'}; font-size: ${component.properties.fontSize || 16}px;">${component.properties.text || 'Tu Cargo en Tu Empresa'}</p>`;
                         break;
                     case 'image':
-                        elementHTML = `<div class="p-2 m-2"><img src="${component.properties.src || 'https://placehold.co/400x200/e2e8f0/cbd5e0?text=Imagen'}" alt="${component.properties.alt || 'Imagen'}" class="w-full h-auto object-cover rounded-md cursor-pointer"></div>`;
+                        elementHTML = `<div class="p-2 m-2"><img src="${component.properties.src || 'https://placehold.co/400x200/e2e8f0/cbd5e0?text=Tu+Logo+o+Foto'}" alt="${component.properties.alt || 'Imagen de perfil'}" class="w-full h-auto object-cover rounded-md cursor-pointer"></div>`;
                         break;
                     case 'button':
-                         elementHTML = `<div class="p-2 m-2"><button class="w-full font-bold py-2 px-4 rounded-lg cursor-pointer" style="background-color: ${component.properties.bgColor || '#3b82f6'}; color: ${component.properties.textColor || '#ffffff'}">${component.properties.text || 'Botón'}</button></div>`;
+                         elementHTML = `<div class="p-2 m-2"><button class="w-full font-bold py-2 px-4 rounded-lg cursor-pointer" style="background-color: ${component.properties.bgColor || '#3b82f6'}; color: ${component.properties.textColor || '#ffffff'}">${component.properties.text || 'Contactar'}</button></div>`;
                         break;
                 }
                 wrapper.innerHTML = elementHTML;
@@ -217,7 +309,6 @@
             if (selectedComponent) {
                 content += '<div class="mb-6 pb-6 border-b"><h4 class="font-semibold text-md mb-2">Propiedades del Componente</h4>';
                 
-                // Propiedades específicas del componente
                 switch(selectedComponent.type) {
                     case 'heading':
                     case 'button':
@@ -240,20 +331,18 @@
                         break;
                 }
                 
-                content += `<button id="delete-component-button" class="w-full mt-4 flex items-center justify-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">Eliminar</button></div>`;
+                content += `<button id="delete-component-button" class="w-full mt-4 flex items-center justify-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">Eliminar Componente</button></div>`;
             } else {
                  content += `<div class="text-center text-gray-500 mt-10"><p>Selecciona un componente para editar sus propiedades.</p></div>`;
             }
 
-            // Propiedades de la tarjeta (siempre visibles)
-            content += '<div><h4 class="font-semibold text-md mb-2">Propiedades de la Tarjeta</h4>';
-            content += createColorInput('backgroundColor', 'Color de Fondo', currentCard.backgroundColor, true); // true for card property
+            content += '<div><h4 class="font-semibold text-md mb-2">Propiedades del Perfil</h4>';
+            content += createColorInput('backgroundColor', 'Color de Fondo', currentCard?.backgroundColor || '#ffffff', true);
             content += '</div>';
 
             propertiesPanelContainer.innerHTML = content;
         }
         
-        // --- HELPERS PARA CREAR INPUTS ---
         function createTextInput(prop, label, value, isCardProp = false) {
             const id = `prop-${prop}`;
             return `<div class="space-y-1 mb-2">
@@ -283,11 +372,10 @@
                     </div>`;
         }
         
-        // --- MANEJADORES DE EVENTOS ---
         window.handleCreateNewCard = (template) => {
             currentCard = {
                 id: null,
-                name: 'Nueva Tarjeta',
+                name: 'Mi Perfil Digital',
                 template: template,
                 components: [],
                 backgroundColor: '#ffffff'
@@ -299,7 +387,7 @@
         window.handleLoadCard = (cardId) => {
             const cardToLoad = savedCards.find(c => c.id === cardId);
             if (cardToLoad) {
-                currentCard = JSON.parse(JSON.stringify(cardToLoad)); // Deep copy
+                currentCard = JSON.parse(JSON.stringify(cardToLoad));
                 selectedComponentId = null;
                 renderApp();
             }
@@ -333,19 +421,19 @@
             
             const cardData = { ...currentCard };
             const cardId = cardData.id;
-            delete cardData.id; // No guardar el ID dentro del documento
+            delete cardData.id;
 
             try {
                 if (cardId) {
                     await setDoc(doc(db, `artifacts/${appId}/users/${userId}/cards`, cardId), cardData);
                 } else {
                     const docRef = await addDoc(collection(db, `artifacts/${appId}/users/${userId}/cards`), cardData);
-                    currentCard.id = docRef.id; // Actualizar con el nuevo ID
+                    currentCard.id = docRef.id;
                 }
-                alert("Tarjeta guardada con éxito!");
+                alert("Perfil guardado con éxito!");
             } catch (error) {
-                console.error("Error al guardar la tarjeta: ", error);
-                alert("Hubo un error al guardar la tarjeta.");
+                console.error("Error al guardar el perfil: ", error);
+                alert("Hubo un error al guardar el perfil.");
             }
         }
         
@@ -356,9 +444,7 @@
             renderApp();
         }
 
-        // --- INICIALIZACIÓN ---
         document.addEventListener('DOMContentLoaded', () => {
-            // Inicializar Firebase
             if (firebaseConfig.apiKey) {
                 const app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
@@ -368,7 +454,6 @@
                     if (user) {
                         userId = user.uid;
                         userIdDisplay.textContent = userId;
-                        // Escuchar cambios en las tarjetas
                         const cardsCollectionPath = `artifacts/${appId}/users/${userId}/cards`;
                         const q = query(collection(db, cardsCollectionPath));
                         onSnapshot(q, (querySnapshot) => {
@@ -376,7 +461,9 @@
                             querySnapshot.forEach((doc) => {
                                 savedCards.push({ id: doc.id, ...doc.data() });
                             });
-                            renderApp(); // Re-renderizar con las tarjetas cargadas
+                            if(!currentCard && document.getElementById('template-selector-view').classList.contains('hidden') === false) {
+                                renderTemplateSelector();
+                            }
                         });
                     } else {
                         signInAnonymously(auth).catch(error => console.error("Error signing in anonymously:", error));
@@ -388,7 +475,6 @@
                 savedCardsContainer.innerHTML = '<p class="text-gray-500">La persistencia está deshabilitada.</p>';
             }
             
-            // Poblar panel de componentes
             const addComponentsPanel = document.getElementById('add-components-panel');
             Object.keys(COMPONENT_TYPES).forEach(type => {
                 const info = COMPONENT_TYPES[type];
@@ -399,11 +485,19 @@
                 addComponentsPanel.appendChild(button);
             });
 
-            // Asignar event listeners
+            const startButtons = [document.getElementById('start-creating-btn-nav'), document.getElementById('start-creating-btn-hero')];
+            startButtons.forEach(btn => btn.onclick = () => switchView('selector'));
+            
+            document.getElementById('home-button').onclick = () => {
+                currentCard = null;
+                switchView('landing');
+            };
+            
             document.getElementById('back-button').onclick = () => {
                 currentCard = null;
                 renderApp();
             };
+
             document.getElementById('save-button').onclick = handleSaveCard;
             cardNameInput.oninput = (e) => {
                 if(currentCard) currentCard.name = e.target.value;
@@ -421,8 +515,7 @@
                 }
             });
 
-            // Renderizado inicial
-            renderApp();
+            switchView('landing');
         });
     </script>
 </body>

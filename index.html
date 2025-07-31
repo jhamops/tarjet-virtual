@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +8,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
     <style>
         /* Estilos personalizados */
         body {
@@ -16,19 +19,15 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
-
         .hidden {
             display: none;
         }
-
         .hero-gradient {
             background: #000000;
         }
-
         .feature-gradient {
-            background: linear-gradient(180deg, #111827 0%, #000000 100%);
+             background: linear-gradient(180deg, #111827 0%, #000000 100%);
         }
-
         .globe-bg {
             position: absolute;
             top: 50%;
@@ -41,74 +40,120 @@
             mask-image: radial-gradient(ellipse 50% 50% at 100% 50%, black 40%, transparent 75%);
             pointer-events: none;
         }
-
         .tab-button.active {
-            background-color: #2563eb;
+            background-color: #2563eb; /* blue-600 */
             color: white;
         }
 
-        .global {
-            background-image: url('./imagenes/backgound-black.jpg') !important;
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center center;
+        /* Estilos para animaciones */
+        [data-animate] {
+            opacity: 0;
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        [data-animate="fade-in-up"] { transform: translateY(30px); }
+        [data-animate="slide-in-left"] { transform: translateX(-40px); }
+        [data-animate="slide-in-right"] { transform: translateX(40px); }
+        .is-visible[data-animate] {
+            opacity: 1;
+            transform: translate(0, 0);
+        }
+        
+        /* Estilo para hover en tarjetas */
+        .card-mockup, .plan-card, .testimonial-card {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .card-mockup:hover {
+            transform: scale(1.05) translateY(-10px) rotate(0deg) !important;
+            z-index: 20 !important;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        .plan-card:hover, .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        /* Estilos para el editor */
+        .component-wrapper.sortable-ghost {
+            opacity: 0.4;
+            background: #2563eb;
+        }
+        .component-wrapper.sortable-chosen {
+            cursor: grabbing;
+        }
+        .component-wrapper {
+            cursor: grab;
+            position: relative;
+        }
+        .component-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border: 2px solid transparent;
+            border-radius: 0.5rem;
+            transition: border-color 0.2s;
+            pointer-events: none; /* Allows clicks to go through to the element */
+        }
+        .component-wrapper.selected .component-overlay {
+            border-color: #3b82f6; /* blue-500 */
+        }
+
+        /* Custom Modal for Alerts */
+        #custom-modal {
+            transition: opacity 0.3s ease-in-out;
+        }
+        #custom-modal-content {
+            transition: transform 0.3s ease-in-out;
         }
     </style>
 </head>
-
 <body class="bg-black text-gray-200">
+
+    <!-- Custom Modal -->
+    <div id="custom-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center p-4" onclick="closeModal()">
+        <div id="custom-modal-content" class="bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-sm text-center transform scale-95" onclick="event.stopPropagation()">
+            <p id="modal-message" class="text-white text-lg mb-6">Message here</p>
+            <button id="modal-close-btn" class="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 transition-colors">Cerrar</button>
+        </div>
+    </div>
 
     <!-- Landing Page -->
     <main id="landing-page-view">
         <header class="bg-black/80 backdrop-blur-md shadow-lg shadow-blue-500/5 sticky top-0 z-50">
             <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
                 <div class="text-2xl font-bold text-white">LinkUpCard</div>
-                <button id="start-creating-btn-nav"
-                    class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                <button id="start-creating-btn-nav" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
                     Empezar a Crear
                 </button>
             </nav>
         </header>
 
         <!-- Hero Section -->
-        <section class="pt-24 pb-12 px-6 hero-gradient">
+        <section class="pt-24 pb-12 px-6 hero-gradient overflow-hidden relative">
             <div class="container mx-auto grid md:grid-cols-2 gap-8 items-center">
                 <div class="text-center md:text-left">
-                    <h1 class="text-5xl md:text-6xl font-extrabold mb-4 leading-tight text-white">Tu Red de Contactos,
-                        Reimaginada.</h1>
-                    <p class="text-xl text-gray-400 mb-8 max-w-xl">La plataforma todo-en-uno para crear tarjetas
-                        digitales, escanear contactos y construir relaciones duraderas.</p>
-                    <button id="start-creating-btn-hero"
-                        class="bg-blue-600 text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-blue-700 transition-transform transform hover:scale-105">
+                    <h1 class="text-5xl md:text-6xl font-extrabold mb-4 leading-tight text-white">Tu Red de Contactos, Reimaginada.</h1>
+                    <p class="text-xl text-gray-400 mb-8 max-w-xl">La plataforma todo-en-uno para crear tarjetas digitales, escanear contactos y construir relaciones duraderas.</p>
+                    <button id="start-creating-btn-hero" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-blue-700 transition-transform transform hover:scale-105">
                         Crea tu Tarjeta Gratis
                     </button>
                 </div>
-                <div class="relative h-[400px] md:h-[500px]">
+                <div id="hero-cards-container" class="relative h-[400px] md:h-[500px]">
                     <!-- Card Mockups -->
-                    <div
-                        class="absolute w-[220px] h-auto bg-white rounded-xl shadow-2xl p-4 top-1/2 left-1/2 -translate-x-[85%] -translate-y-[60%] rotate-[-15deg]">
-                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=1780&auto=format&fit=crop"
-                            class="w-16 h-16 rounded-full mx-auto mb-2 border-2 border-blue-500"
-                            alt="Foto de perfil de Alex Thompson">
+                    <div id="card1" class="card-mockup absolute w-[220px] h-auto bg-white rounded-xl shadow-2xl p-4 top-1/2 left-1/2">
+                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=1780&auto=format&fit=crop" class="w-16 h-16 rounded-full mx-auto mb-2 border-2 border-blue-500" alt="Foto de perfil de Alex Thompson">
                         <p class="text-center font-bold text-gray-800">Alex Thompson</p>
                         <p class="text-center text-sm text-gray-500">Product Manager</p>
                     </div>
-                    <div
-                        class="absolute w-[250px] h-auto bg-gray-800 rounded-2xl shadow-2xl p-5 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+                    <div id="card2" class="card-mockup absolute w-[250px] h-auto bg-gray-800 rounded-2xl shadow-2xl p-5 top-1/2 left-1/2 z-10">
                         <div class="flex items-center gap-4 mb-4">
-                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop"
-                                class="w-16 h-16 rounded-full object-cover border-2 border-white"
-                                alt="Foto de perfil de Sophia Kub">
+                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop" class="w-16 h-16 rounded-full object-cover border-2 border-white" alt="Foto de perfil de Sophia Kub">
                             <div>
                                 <p class="font-bold text-white">Sophia Kub</p>
                                 <p class="text-sm text-gray-400">Marketing Director</p>
                             </div>
                         </div>
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=example&bgcolor=1f2937&color=ffffff"
-                            class="w-full rounded-lg" alt="Código QR de ejemplo">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=example&bgcolor=1f2937&color=ffffff" class="w-full rounded-lg" alt="Código QR de ejemplo">
                     </div>
-                    <div
-                        class="absolute w-[220px] h-auto bg-white rounded-xl shadow-2xl p-4 top-1/2 left-1/2 -translate-x-[15%] -translate-y-[40%] rotate-[15deg]">
+                    <div id="card3" class="card-mockup absolute w-[220px] h-auto bg-white rounded-xl shadow-2xl p-4 top-1/2 left-1/2">
                         <div class="bg-blue-500 h-16 rounded-t-lg"></div>
                         <p class="text-center font-bold text-gray-800 mt-2">Brightwave</p>
                         <p class="text-center text-sm text-gray-500">Agencia de Marketing</p>
@@ -117,46 +162,36 @@
             </div>
         </section>
 
-        <!-- New Feature Section from Image -->
+        <!-- New Feature Section -->
         <section class="py-24 px-6 bg-black">
             <div class="container mx-auto grid md:grid-cols-2 gap-16 items-center">
-                <div class="md:order-2">
+                 <div data-animate="slide-in-right" class="md:order-2">
                     <span class="text-blue-400 font-semibold">CAPTURA DE LEADS</span>
-                    <h3 class="text-4xl font-bold mt-2 mb-4 text-white">Amplía tu red: captura clientes potenciales.
-                    </h3>
-                    <p class="text-gray-400 text-lg">Con nuestros formularios integrados en tu tarjeta digital, captura
-                        la información de contacto de tus prospectos sobre la marcha. Sin interrupciones y en solo unos
-                        clics.</p>
+                    <h3 class="text-4xl font-bold mt-2 mb-4 text-white">Amplía tu red: captura clientes potenciales.</h3>
+                    <p class="text-gray-400 text-lg">Con nuestros formularios integrados en tu tarjeta digital, captura la información de contacto de tus prospectos sobre la marcha. Sin interrupciones y en solo unos clics.</p>
                 </div>
-                <div class="md:order-1 flex justify-center">
-                    <!-- Phone Mockup -->
+                <div data-animate="slide-in-left" class="md:order-1 flex justify-center">
+                     <!-- Phone Mockup -->
                     <div class="relative h-96 w-96">
-                        <img src="https://placehold.co/300x600/111827/ffffff?text=Perfil+1" alt="Tarjeta de perfil 1"
-                            class="absolute rounded-3xl w-48 top-0 left-1/2 -translate-x-1/2 rotate-[-10deg] shadow-2xl">
-                        <img src="https://placehold.co/300x600/1f2937/ffffff?text=Perfil+2" alt="Tarjeta de perfil 2"
-                            class="absolute rounded-3xl w-48 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 shadow-2xl">
-                        <img src="https://placehold.co/300x600/374151/ffffff?text=Perfil+3" alt="Tarjeta de perfil 3"
-                            class="absolute rounded-3xl w-48 bottom-0 left-1/2 -translate-x-1/2 rotate-[10deg] shadow-2xl">
+                        <img src="https://placehold.co/300x600/111827/ffffff?text=Perfil+1" alt="Tarjeta de perfil 1" class="absolute rounded-3xl w-48 top-0 left-1/2 -translate-x-1/2 rotate-[-10deg] shadow-2xl transition-transform duration-300 hover:scale-105 hover:rotate-[-12deg] hover:z-20">
+                        <img src="https://placehold.co/300x600/1f2937/ffffff?text=Perfil+2" alt="Tarjeta de perfil 2" class="absolute rounded-3xl w-48 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 shadow-2xl transition-transform duration-300 hover:scale-105 hover:z-20">
+                        <img src="https://placehold.co/300x600/374151/ffffff?text=Perfil+3" alt="Tarjeta de perfil 3" class="absolute rounded-3xl w-48 bottom-0 left-1/2 -translate-x-1/2 rotate-[10deg] shadow-2xl transition-transform duration-300 hover:scale-105 hover:rotate-[12deg] hover:z-20">
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Simplified CTA Section -->
-        <section class="py-24 px-6 bg-black text-center">
+        <section class="py-24 px-6 bg-black text-center" data-animate="fade-in-up">
             <div class="container mx-auto">
-                <h2 class="text-4xl font-bold text-white mb-4">Tarjetas de Negocio Digitales. <br> Gestión de contactos
-                    simplificado.</h2>
-                <p class="text-gray-400 mb-8 max-w-3xl mx-auto">Ayudar a los profesionales a crear más conexiones de
-                    negocios es el núcleo de lo que hacemos. Diseñada para profesionales orientados al networking y
-                    equipada con potentes funciones, LinkUpCard está redefiniendo el networking.</p>
-                <button class="bg-blue-600 text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-blue-700">Pedir
-                    Demo</button>
+                 <h2 class="text-4xl font-bold text-white mb-4">Tarjetas de Negocio Digitales. <br> Gestión de contactos simplificado.</h2>
+                 <p class="text-gray-400 mb-8 max-w-3xl mx-auto">Ayudar a los profesionales a crear más conexiones de negocios es el núcleo de lo que hacemos. Diseñada para profesionales orientados al networking y equipada con potentes funciones, LinkUpCard está redefiniendo el networking.</p>
+                 <button class="bg-blue-600 text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-blue-700">Pedir Demo</button>
             </div>
         </section>
 
         <!-- Interactive Tab Section -->
-        <section class="py-24 px-6 feature-gradient">
+        <section class="py-24 px-6 feature-gradient" data-animate="fade-in-up">
             <div class="container mx-auto">
                 <div class="grid md:grid-cols-12 gap-8">
                     <div class="md:col-span-3">
@@ -164,7 +199,7 @@
                             <!-- Tab buttons will be inserted here by JS -->
                         </div>
                     </div>
-                    <div id="tabs-content" class="md:col-span-9 bg-gray-800/50 p-8 rounded-lg">
+                    <div id="tabs-content" class="md:col-span-9 bg-gray-800/50 p-8 rounded-lg min-h-[450px] relative">
                         <!-- Tab content will be inserted here by JS -->
                     </div>
                 </div>
@@ -172,57 +207,47 @@
         </section>
 
         <!-- Plans Section -->
-        <section class="py-24 px-6 bg-black">
+        <section class="py-24 px-6 bg-black" data-animate="fade-in-up">
             <div class="container mx-auto text-center">
                 <h2 class="text-4xl font-bold text-white mb-4">Comienza Contigo</h2>
-                <p class="text-gray-400 mb-12 max-w-2xl mx-auto">Ya sea para ti o para tu empresa, LinkUpCard tiene un
-                    plan que se ajusta a tus necesidades.</p>
+                <p class="text-gray-400 mb-12 max-w-2xl mx-auto">Ya sea para ti o para tu empresa, LinkUpCard tiene un plan que se ajusta a tus necesidades.</p>
                 <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    <div class="bg-gray-800 p-8 rounded-lg border border-gray-700">
+                    <div class="plan-card bg-gray-800 p-8 rounded-lg border border-gray-700">
                         <h3 class="text-2xl font-bold text-white mb-2">Personal</h3>
                         <p class="text-gray-400 mb-6">Para compartir con amigos, familia y conexiones personales.</p>
-                        <button class="w-full bg-gray-700 text-white font-bold py-2 rounded-lg hover:bg-gray-600">Saber
-                            Más</button>
+                        <button class="w-full bg-gray-700 text-white font-bold py-2 rounded-lg hover:bg-gray-600">Saber Más</button>
                     </div>
-                    <div class="bg-gray-800 p-8 rounded-lg border border-gray-700">
+                     <div class="plan-card bg-gray-800 p-8 rounded-lg border border-gray-700">
                         <h3 class="text-2xl font-bold text-white mb-2">Profesional</h3>
-                        <p class="text-gray-400 mb-6">Para individuos que buscan crecer su marca y expandir su alcance.
-                        </p>
-                        <button class="w-full bg-gray-700 text-white font-bold py-2 rounded-lg hover:bg-gray-600">Saber
-                            Más</button>
+                        <p class="text-gray-400 mb-6">Para individuos que buscan crecer su marca y expandir su alcance.</p>
+                        <button class="w-full bg-gray-700 text-white font-bold py-2 rounded-lg hover:bg-gray-600">Saber Más</button>
                     </div>
-                    <div class="bg-gray-800 p-8 rounded-lg border border-gray-700">
+                     <div class="plan-card bg-gray-800 p-8 rounded-lg border border-gray-700">
                         <h3 class="text-2xl font-bold text-white mb-2">Business</h3>
-                        <p class="text-gray-400 mb-6">Para equipos de 5-100 usuarios que quieren un lanzamiento rápido y
-                            con marca.</p>
-                        <button class="w-full bg-gray-700 text-white font-bold py-2 rounded-lg hover:bg-gray-600">Saber
-                            Más</button>
+                        <p class="text-gray-400 mb-6">Para equipos de 5-100 usuarios que quieren un lanzamiento rápido y con marca.</p>
+                        <button class="w-full bg-gray-700 text-white font-bold py-2 rounded-lg hover:bg-gray-600">Saber Más</button>
                     </div>
-                    <div class="bg-gray-800 p-8 rounded-lg border border-blue-500">
+                     <div class="plan-card bg-gray-800 p-8 rounded-lg border border-blue-500">
                         <h3 class="text-2xl font-bold text-white mb-2">Enterprise</h3>
-                        <p class="text-gray-400 mb-6">Para organizaciones con más de 101 usuarios listas para
-                            automatizar y escalar.</p>
-                        <button class="w-full bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700">Saber
-                            Más</button>
+                        <p class="text-gray-400 mb-6">Para organizaciones con más de 101 usuarios listas para automatizar y escalar.</p>
+                        <button class="w-full bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700">Saber Más</button>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Testimonials Section -->
-        <section class="py-24 px-6 feature-gradient">
+        <section class="py-24 px-6 feature-gradient" data-animate="fade-in-up">
             <div class="container mx-auto max-w-5xl text-center">
                 <h2 class="text-4xl font-bold text-white mb-12">Lo que dicen nuestros usuarios</h2>
                 <div class="grid md:grid-cols-2 gap-8 text-left">
-                    <div class="bg-gray-800 p-8 rounded-lg">
-                        <p class="text-gray-300 mb-4">"LinkUpCard ha cambiado por completo cómo nuestro equipo de ventas
-                            gestiona los leads de eventos. Es indispensable."</p>
+                    <div class="testimonial-card bg-gray-800 p-8 rounded-lg">
+                        <p class="text-gray-300 mb-4">"LinkUpCard ha cambiado por completo cómo nuestro equipo de ventas gestiona los leads de eventos. Es indispensable."</p>
                         <div class="font-bold text-white">Ana García</div>
                         <div class="text-sm text-gray-400">Directora de Ventas, TechCorp</div>
                     </div>
-                    <div class="bg-gray-800 p-8 rounded-lg">
-                        <p class="text-gray-300 mb-4">"La mejor parte es la facilidad para compartir mi contacto. El
-                            código QR funciona a la perfección y la gente queda impresionada."</p>
+                    <div class="testimonial-card bg-gray-800 p-8 rounded-lg">
+                        <p class="text-gray-300 mb-4">"La mejor parte es la facilidad para compartir mi contacto. El código QR funciona a la perfección y la gente queda impresionada."</p>
                         <div class="font-bold text-white">Carlos Mendoza</div>
                         <div class="text-sm text-gray-400">Consultor Freelance</div>
                     </div>
@@ -231,18 +256,14 @@
         </section>
 
         <!-- Enterprise Section -->
-        <section class="py-24 px-6 bg-black relative overflow-hidden global">
+        <section class="py-24 px-6 bg-black relative overflow-hidden" data-animate="fade-in-up">
             <div class="globe-bg"></div>
             <div class="container mx-auto max-w-5xl relative z-10">
                 <div class="grid md:grid-cols-2 gap-16 items-center">
                     <div>
                         <span class="text-blue-400 font-semibold">ENTERPRISE</span>
-                        <h3 class="text-4xl font-bold mt-2 mb-4 text-white">La Elección #1 para Empresas a Nivel Mundial
-                        </h3>
-                        <p class="text-gray-400 text-lg mb-8">LinkUpCard es la plataforma de tarjetas de visita
-                            digitales más grande del mundo y la principal solución para grandes empresas. Con más de 8
-                            millones de tarjetas en todo el mundo, seguimos marcando el estándar para implementaciones a
-                            gran escala.</p>
+                        <h3 class="text-4xl font-bold mt-2 mb-4 text-white">La Elección #1 para Empresas a Nivel Mundial</h3>
+                        <p class="text-gray-400 text-lg mb-8">LinkUpCard es la plataforma de tarjetas de visita digitales más grande del mundo y la principal solución para grandes empresas. Con más de 8 millones de tarjetas en todo el mundo, seguimos marcando el estándar para implementaciones a gran escala.</p>
                         <div class="flex flex-wrap items-center gap-x-8 gap-y-4 text-gray-500">
                             <span class="font-bold text-xl">AIA</span>
                             <span class="font-bold text-xl">parexel</span>
@@ -258,10 +279,8 @@
         <section class="py-20 px-6 hero-gradient">
             <div class="container mx-auto text-center">
                 <h2 class="text-4xl font-bold text-white mb-4">Listo para Transformar tu Networking?</h2>
-                <p class="text-lg text-gray-300 mb-8">Únete a miles de profesionales que ya conectan de forma más
-                    inteligente.</p>
-                <button id="start-creating-btn-final"
-                    class="bg-blue-600 text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-blue-700 transition-transform transform hover:scale-105">
+                <p class="text-lg text-gray-300 mb-8">Únete a miles de profesionales que ya conectan de forma más inteligente.</p>
+                <button id="start-creating-btn-final" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-blue-700 transition-transform transform hover:scale-105">
                     Crea tu Tarjeta Gratis
                 </button>
             </div>
@@ -274,30 +293,23 @@
 
     <!-- App: Template Selector View -->
     <div id="template-selector-view" class="hidden min-h-screen flex flex-col items-center justify-center p-4 bg-black">
-        <button id="home-button"
-            class="absolute top-4 left-4 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600">← Volver a
-            Inicio</button>
+         <button id="home-button" class="absolute top-4 left-4 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600">← Volver a Inicio</button>
         <div class="w-full max-w-4xl">
             <h1 class="text-4xl font-bold text-center text-white mb-2">Crea tu Perfil Digital LinkUpCard</h1>
-            <p class="text-center text-gray-400 mb-8 max-w-2xl mx-auto">Tu tarjeta de presentación digital, siempre
-                actualizada. Elige una plantilla para empezar o carga un perfil existente.</p>
-
+            <p class="text-center text-gray-400 mb-8 max-w-2xl mx-auto">Tu tarjeta de presentación digital, siempre actualizada. Elige una plantilla para empezar o carga un perfil existente.</p>
+            
             <div class="grid md:grid-cols-2 gap-8 mb-12">
                 <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700">
                     <h2 class="text-2xl font-semibold mb-4 text-white">Crear Nuevo Perfil</h2>
                     <p class="text-gray-400 mb-4">Selecciona un diseño base para tu tarjeta.</p>
                     <div class="space-y-4">
-                        <button onclick="handleCreateNewCard('single-column')"
-                            class="w-full text-left p-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        <button onclick="handleCreateNewCard('single-column')" class="w-full text-left p-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
                             <span class="font-bold">Perfil Clásico</span>
-                            <p class="text-sm text-blue-200">Un diseño limpio y directo para tu información esencial.
-                            </p>
+                            <p class="text-sm text-blue-200">Un diseño limpio y directo para tu información esencial.</p>
                         </button>
-                        <button onclick="handleCreateNewCard('image-header')"
-                            class="w-full text-left p-4 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors">
+                        <button onclick="handleCreateNewCard('image-header')" class="w-full text-left p-4 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors">
                             <span class="font-bold">Perfil con Banner</span>
-                            <p class="text-sm text-gray-300">Destaca tu marca personal o empresa con una imagen de
-                                cabecera.</p>
+                            <p class="text-sm text-gray-300">Destaca tu marca personal o empresa con una imagen de cabecera.</p>
                         </button>
                     </div>
                 </div>
@@ -309,29 +321,19 @@
                     </div>
                 </div>
             </div>
-            <footer class="text-center text-gray-500 text-sm">
-                <p>Tu ID de usuario para compartir es: <strong id="user-id-display"
-                        class="select-all">Cargando...</strong></p>
-            </footer>
+             <footer class="text-center text-gray-500 text-sm">
+                 <p>Tu ID de usuario para compartir es: <strong id="user-id-display" class="select-all">Cargando...</strong></p>
+             </footer>
         </div>
     </div>
 
     <!-- App: Editor View -->
     <div id="editor-view" class="hidden flex flex-col h-screen font-sans bg-black text-white">
         <header class="flex items-center justify-between p-2 bg-gray-900 border-b border-gray-700 shadow-sm">
-            <button id="back-button" class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600">←
-                Volver</button>
-            <input type="text" id="card-name-input"
-                class="text-lg font-semibold bg-transparent border-b-2 border-transparent focus:border-blue-500 outline-none mx-4 flex-grow"
-                placeholder="Nombre de tu Perfil" />
-            <button id="save-button"
-                class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-                    <polyline points="17 21 17 13 7 13 7 21"></polyline>
-                    <polyline points="7 3 7 8 15 8"></polyline>
-                </svg>
+            <button id="back-button" class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600">← Volver</button>
+            <input type="text" id="card-name-input" class="text-lg font-semibold bg-transparent border-b-2 border-transparent focus:border-blue-500 outline-none mx-4 flex-grow" placeholder="Nombre de tu Perfil"/>
+            <button id="save-button" class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
                 Guardar Perfil
             </button>
         </header>
@@ -345,15 +347,14 @@
                     <!-- El lienzo se renderizará aquí -->
                 </div>
             </main>
-            <aside id="properties-panel-container"
-                class="w-80 bg-gray-900 p-4 border-l border-gray-700 overflow-y-auto"></aside>
+            <aside id="properties-panel-container" class="w-80 bg-gray-900 p-4 border-l border-gray-700 overflow-y-auto"></aside>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, doc, addDoc, setDoc, onSnapshot, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, doc, addDoc, setDoc, onSnapshot, query, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
@@ -363,13 +364,14 @@
         let currentCard = null;
         let savedCards = [];
         let selectedComponentId = null;
-
+        let sortableInstance = null;
+        
         const COMPONENT_TYPES = {
             heading: { name: 'Nombre y Cargo', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v7a6 6 0 0 0 6 6 6 6 0 0 0 6-6V3"></path><line x1="4" y1="21" x2="20" y2="21"></line></svg>' },
             text: { name: 'Biografía/Texto', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>' },
             image: { name: 'Foto de Perfil', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>' },
-            button: { name: 'Botón (Contacto)', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8z"></path><path d="M12 12v-1"></path></svg>' },
-            socials: { name: 'Redes Sociales', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>' }
+            button: { name: 'Botón (Enlace)', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"></path></svg>' },
+            socials: { name: 'Redes Sociales', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>'}
         };
 
         const views = {
@@ -382,6 +384,29 @@
         const savedCardsContainer = document.getElementById('saved-cards-container');
         const cardNameInput = document.getElementById('card-name-input');
         const userIdDisplay = document.getElementById('user-id-display');
+
+        // Modal functions
+        const modal = document.getElementById('custom-modal');
+        const modalContent = document.getElementById('custom-modal-content');
+        const modalMessage = document.getElementById('modal-message');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+
+        function showModal(message) {
+            modalMessage.textContent = message;
+            modal.classList.remove('hidden');
+            modal.classList.add('opacity-100');
+            modalContent.classList.add('scale-100');
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('opacity-0');
+            }, 300);
+        }
+        modalCloseBtn.onclick = closeModal;
 
         function switchView(viewName) {
             Object.values(views).forEach(v => v.classList.add('hidden'));
@@ -404,11 +429,25 @@
             savedCardsContainer.innerHTML = '';
             if (savedCards.length > 0) {
                 savedCards.forEach(card => {
+                    const cardElement = document.createElement('div');
+                    cardElement.className = 'flex items-center justify-between p-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors text-white';
+                    
                     const button = document.createElement('button');
-                    button.className = 'w-full text-left p-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors text-white';
+                    button.className = 'text-left flex-grow';
                     button.textContent = card.name || 'Perfil sin nombre';
                     button.onclick = () => handleLoadCard(card.id);
-                    savedCardsContainer.appendChild(button);
+                    
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-400 hover:text-red-300"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>';
+                    deleteBtn.className = 'p-1';
+                    deleteBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        handleDeleteCard(card.id);
+                    };
+
+                    cardElement.appendChild(button);
+                    cardElement.appendChild(deleteBtn);
+                    savedCardsContainer.appendChild(cardElement);
                 });
             } else {
                 savedCardsContainer.innerHTML = '<p class="text-gray-500">No tienes perfiles guardados.</p>';
@@ -425,70 +464,106 @@
             canvasContainer.innerHTML = ''; // Limpiar contenedor principal
 
             const cardWrapper = document.createElement('div');
-            cardWrapper.style.backgroundColor = currentCard.backgroundColor || '#1f2937';
+            cardWrapper.style.backgroundColor = currentCard.backgroundColor || '#ffffff';
+            cardWrapper.className = 'text-gray-800';
 
             const profileImageComponent = currentCard.components.find(c => c.type === 'image');
-            const headingComponent = currentCard.components.find(c => c.type === 'heading');
-            const textComponent = currentCard.components.find(c => c.type === 'text');
-            const socialsComponent = currentCard.components.find(c => c.type === 'socials');
+            const headerImageUrl = profileImageComponent?.properties.headerSrc || 'https://placehold.co/400x150/3b82f6/ffffff?text=Banner';
 
             let headerHTML = `
-                <div class="bg-blue-600 h-24 relative">
-                    ${profileImageComponent ? `<img src="${profileImageComponent.properties.src || 'https://placehold.co/100x100/e2e8f0/cbd5e0?text=Foto'}" class="w-24 h-24 rounded-full border-4 border-gray-800 absolute -bottom-12 left-1/2 -translate-x-1/2 cursor-pointer" onclick="setSelectedComponentId(${profileImageComponent.id})">` : ''}
+                <div class="h-36 bg-cover bg-center relative cursor-pointer" style="background-image: url('${headerImageUrl}')" onclick="setSelectedComponentId(${profileImageComponent?.id}, 'header')">
+                    ${profileImageComponent ? `<img src="${profileImageComponent.properties.src || 'https://placehold.co/100x100/e2e8f0/cbd5e0?text=Foto'}" class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg absolute -bottom-12 left-1/2 -translate-x-1/2 cursor-pointer" onclick="event.stopPropagation(); setSelectedComponentId(${profileImageComponent.id}, 'profile')">` : ''}
+                    <div class="component-overlay"></div>
                 </div>
             `;
-
+            
             let bodyHTML = `<div class="pt-16 p-6 text-center">`;
+            // Only render non-draggable main components here
+            const headingComponent = currentCard.components.find(c => c.type === 'heading');
             if (headingComponent) {
-                bodyHTML += `<h2 class="text-2xl font-bold cursor-pointer text-white" onclick="setSelectedComponentId(${headingComponent.id})">${headingComponent.properties.text || 'Tu Nombre'}</h2>`;
+                bodyHTML += `<div class="component-wrapper" data-id="${headingComponent.id}" onclick="setSelectedComponentId(${headingComponent.id})"><h2 class="text-2xl font-bold text-gray-800">${headingComponent.properties.text || 'Tu Nombre'}</h2><div class="component-overlay"></div></div>`;
             }
+            const textComponent = currentCard.components.find(c => c.type === 'text');
             if (textComponent) {
-                bodyHTML += `<p class="text-gray-400 cursor-pointer" onclick="setSelectedComponentId(${textComponent.id})">${textComponent.properties.text || 'Tu Cargo en Tu Empresa'}</p>`;
+                 bodyHTML += `<div class="component-wrapper" data-id="${textComponent.id}" onclick="setSelectedComponentId(${textComponent.id})"><p class="text-gray-500">${textComponent.properties.text || 'Tu Cargo en Tu Empresa'}</p><div class="component-overlay"></div></div>`;
             }
             bodyHTML += `</div>`;
 
-            let componentsHTML = `<div class="px-6 pb-6 space-y-4">`;
-            currentCard.components.filter(c => !['image', 'heading', 'text', 'socials'].includes(c.type)).forEach(component => {
-                componentsHTML += renderComponent(component);
-            });
-            if (socialsComponent) {
-                componentsHTML += renderComponent(socialsComponent);
-            }
-            componentsHTML += `</div>`;
+            let componentsContainer = document.createElement('div');
+            componentsContainer.id = 'sortable-components';
+            componentsContainer.className = 'px-6 pb-6 space-y-4';
 
+            // Render draggable components
+            currentCard.components.filter(c => ['button', 'socials'].includes(c.type)).forEach(component => {
+                componentsContainer.innerHTML += renderComponent(component);
+            });
+            
             let qrHTML = `
-                <div class="bg-gray-900 p-4 flex flex-col items-center gap-2">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://example.com/${userId}/${currentCard.id || ''}&bgcolor=111827&color=ffffff" alt="QR Code">
-                    <p class="text-sm text-gray-400">Escanea para conectar</p>
+                <div class="bg-gray-100 p-4 flex flex-col items-center gap-2">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://example.com/${userId}/${currentCard.id || ''}&bgcolor=f3f4f6&color=111827" alt="QR Code">
+                    <p class="text-sm text-gray-500">Escanea para conectar</p>
                 </div>
             `;
 
-            cardWrapper.innerHTML = headerHTML + bodyHTML + componentsHTML + qrHTML;
+            cardWrapper.innerHTML = headerHTML + bodyHTML;
+            cardWrapper.appendChild(componentsContainer);
+            cardWrapper.innerHTML += qrHTML;
             canvasContainer.appendChild(cardWrapper);
+            
+            // Re-highlight selected component
+            if (selectedComponentId) {
+                const el = canvasContainer.querySelector(`[data-id='${selectedComponentId}']`);
+                if (el) el.classList.add('selected');
+            }
+
+            // Initialize SortableJS for drag and drop
+            const sortableContainer = document.getElementById('sortable-components');
+            if (sortableContainer) {
+                sortableInstance = new Sortable(sortableContainer, {
+                    animation: 150,
+                    ghostClass: 'sortable-ghost',
+                    chosenClass: 'sortable-chosen',
+                    onEnd: function (evt) {
+                        const componentId = evt.item.dataset.id;
+                        const oldIndex = currentCard.components.findIndex(c => c.id == componentId);
+                        const newIndexOffset = currentCard.components.filter(c => !['button', 'socials'].includes(c.type)).length;
+                        const newIndex = newIndexOffset + evt.newDraggableIndex;
+
+                        // Reorder the array
+                        const [movedItem] = currentCard.components.splice(oldIndex, 1);
+                        currentCard.components.splice(newIndex, 0, movedItem);
+
+                        renderCanvas(); // Re-render to reflect the change
+                    },
+                });
+            }
         }
 
         function renderComponent(component) {
-            const isSelected = component.id === selectedComponentId;
             let elementHTML = '';
-            const wrapperClass = `component-wrapper ${isSelected ? 'ring-2 ring-blue-500 rounded-lg' : 'hover:ring-2 hover:ring-blue-800 rounded-lg'}`;
-
+            
+            // Wrapper for selection and dragging
+            elementHTML += `<div class="component-wrapper" data-id="${component.id}" onclick="setSelectedComponentId(${component.id})">`;
+            
             switch (component.type) {
                 case 'button':
-                    elementHTML = `<div class="${wrapperClass}" onclick="setSelectedComponentId(${component.id})"><button class="w-full font-bold py-2 px-4 rounded-lg cursor-pointer" style="background-color: ${component.properties.bgColor || '#3b82f6'}; color: ${component.properties.textColor || '#ffffff'}">${component.properties.text || 'Contactar'}</button></div>`;
+                    elementHTML += `<button class="w-full font-bold py-3 px-4 rounded-lg pointer-events-none" style="background-color: ${component.properties.bgColor || '#3b82f6'}; color: ${component.properties.textColor || '#ffffff'}">${component.properties.text || 'Contactar'}</button>`;
                     break;
                 case 'socials':
                     const p = component.properties;
-                    elementHTML += `<div class="flex justify-center gap-4 p-2 ${wrapperClass}" onclick="setSelectedComponentId(${component.id})">`;
-                    if (p.linkedin) elementHTML += `<a href="${p.linkedin}" target="_blank"><svg class="w-6 h-6 text-gray-400 hover:text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>`;
-                    if (p.twitter) elementHTML += `<a href="${p.twitter}" target="_blank"><svg class="w-6 h-6 text-gray-400 hover:text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-.424.727-.666 1.581-.666 2.477 0 1.69.86 3.178 2.158 4.049-.802-.026-1.55-.248-2.2-.608v.064c0 2.358 1.678 4.322 3.898 4.774-.407.111-.838.171-1.28.171-.314 0-.618-.031-.926-.087.618 1.932 2.413 3.338 4.545 3.375-1.667 1.305-3.772 2.085-6.053 2.085-.394 0-.782-.023-1.164-.067 2.153 1.386 4.703 2.193 7.423 2.193 8.907 0 13.788-7.373 13.788-13.788 0-.21 0-.419-.014-.627.947-.684 1.77-1.536 2.427-2.517z"/></svg></a>`;
-                    if (p.instagram) elementHTML += `<a href="${p.instagram}" target="_blank"><svg class="w-6 h-6 text-gray-400 hover:text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.012 3.584-.07 4.85c-.148 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.85s.012-3.584.07-4.85c.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.85-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.947s-.014-3.667-.072-4.947c-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.072-4.948-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44 1.441-.645 1.441-1.44-.645-1.44-1.441-1.44z"/></svg></a>`;
-                    if (p.github) elementHTML += `<a href="${p.github}" target="_blank"><svg class="w-6 h-6 text-gray-400 hover:text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>`;
+                    elementHTML += `<div class="flex justify-center gap-4 p-2 pointer-events-none">`;
+                    if(p.linkedin) elementHTML += `<a href="#" onclick="return false;"><svg class="w-8 h-8 text-gray-500" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>`;
+                    if(p.twitter) elementHTML += `<a href="#" onclick="return false;"><svg class="w-8 h-8 text-gray-500" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-.424.727-.666 1.581-.666 2.477 0 1.69.86 3.178 2.158 4.049-.802-.026-1.55-.248-2.2-.608v.064c0 2.358 1.678 4.322 3.898 4.774-.407.111-.838.171-1.28.171-.314 0-.618-.031-.926-.087.618 1.932 2.413 3.338 4.545 3.375-1.667 1.305-3.772 2.085-6.053 2.085-.394 0-.782-.023-1.164-.067 2.153 1.386 4.703 2.193 7.423 2.193 8.907 0 13.788-7.373 13.788-13.788 0-.21 0-.419-.014-.627.947-.684 1.77-1.536 2.427-2.517z"/></svg></a>`;
+                    if(p.instagram) elementHTML += `<a href="#" onclick="return false;"><svg class="w-8 h-8 text-gray-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.012 3.584-.07 4.85c-.148 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.85s.012-3.584.07-4.85c.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.85-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.947s-.014-3.667-.072-4.947c-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.072-4.948-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44 1.441-.645 1.441-1.44-.645-1.44-1.441-1.44z"/></svg></a>`;
+                    if(p.github) elementHTML += `<a href="#" onclick="return false;"><svg class="w-8 h-8 text-gray-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>`;
                     elementHTML += `</div>`;
                     break;
             }
+            // Add the overlay for selection indication
+            elementHTML += '<div class="component-overlay"></div></div>';
             return elementHTML;
         }
-
+        
         function renderPropertiesPanel() {
             const selectedComponent = currentCard?.components.find(c => c.id === selectedComponentId);
             propertiesPanelContainer.innerHTML = '';
@@ -497,8 +572,8 @@
 
             if (selectedComponent) {
                 content += '<div class="mb-6 pb-6 border-b border-gray-700"><h4 class="font-semibold text-md mb-2 text-white">Propiedades del Componente</h4>';
-
-                switch (selectedComponent.type) {
+                
+                switch(selectedComponent.type) {
                     case 'heading':
                         content += createTextInput('text', 'Nombre Completo', selectedComponent.properties.text || '');
                         break;
@@ -506,10 +581,12 @@
                         content += createTextareaInput('text', 'Cargo y Empresa', selectedComponent.properties.text || '');
                         break;
                     case 'image':
-                        content += createTextInput('src', 'URL de tu Foto', selectedComponent.properties.src || '');
+                        content += createTextInput('src', 'URL de Foto de Perfil', selectedComponent.properties.src || '');
+                        content += createTextInput('headerSrc', 'URL de Imagen de Banner', selectedComponent.properties.headerSrc || '');
                         break;
                     case 'button':
                         content += createTextInput('text', 'Texto del Botón', selectedComponent.properties.text || '');
+                        content += createTextInput('url', 'URL del Enlace', selectedComponent.properties.url || '');
                         content += createColorInput('bgColor', 'Color de Fondo', selectedComponent.properties.bgColor || '#3b82f6');
                         content += createColorInput('textColor', 'Color de Texto', selectedComponent.properties.textColor || '#ffffff');
                         break;
@@ -520,19 +597,23 @@
                         content += createTextInput('github', 'URL de GitHub', selectedComponent.properties.github || '');
                         break;
                 }
-
-                content += `<button id="delete-component-button" class="w-full mt-4 flex items-center justify-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">Eliminar Componente</button></div>`;
+                
+                if (!['image', 'heading', 'text', 'socials'].includes(selectedComponent.type)) {
+                    content += `<button id="delete-component-button" class="w-full mt-4 flex items-center justify-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">Eliminar Componente</button></div>`;
+                } else {
+                     content += '</div>';
+                }
             } else {
-                content += `<div class="text-center text-gray-500 mt-10"><p>Selecciona un componente para editar sus propiedades.</p></div>`;
+                 content += `<div class="text-center text-gray-500 mt-10"><p>Selecciona un componente para editar sus propiedades.</p></div>`;
             }
 
             content += '<div><h4 class="font-semibold text-md mb-2 text-white">Diseño del Perfil</h4>';
-            content += createColorInput('backgroundColor', 'Color de Fondo', currentCard?.backgroundColor || '#1f2937', true);
+            content += createColorInput('backgroundColor', 'Color de Fondo de Tarjeta', currentCard?.backgroundColor || '#ffffff', true);
             content += '</div>';
 
             propertiesPanelContainer.innerHTML = content;
         }
-
+        
         function createTextInput(prop, label, value, isCardProp = false) {
             const id = `prop-${prop}`;
             return `<div class="space-y-1 mb-2">
@@ -551,22 +632,22 @@
             const id = `prop-${prop}`;
             return `<div class="space-y-1 mb-2">
                         <label for="${id}" class="block text-sm font-medium text-gray-400">${label}</label>
-                        <input type="color" id="${id}" value="${value}" oninput="handlePropertyChange('${prop}', this.value, ${isCardProp})" class="mt-1 block w-full h-10 rounded-md border-gray-600 shadow-sm">
+                        <input type="color" id="${id}" value="${value}" oninput="handlePropertyChange('${prop}', this.value, ${isCardProp})" class="mt-1 block w-full h-10 rounded-md border-gray-600 shadow-sm p-0">
                     </div>`;
         }
-
+        
         window.handleCreateNewCard = (template) => {
             currentCard = {
                 id: null,
                 name: 'Mi Perfil Digital',
                 template: template,
                 components: [
-                    { id: Date.now() + 1, type: 'image', properties: {} },
-                    { id: Date.now() + 2, type: 'heading', properties: {} },
-                    { id: Date.now() + 3, type: 'text', properties: {} },
-                    { id: Date.now() + 4, type: 'socials', properties: {} },
+                    {id: Date.now() + 1, type: 'image', properties: {}},
+                    {id: Date.now() + 2, type: 'heading', properties: {}},
+                    {id: Date.now() + 3, type: 'text', properties: {}},
+                    {id: Date.now() + 4, type: 'socials', properties: {}},
                 ],
-                backgroundColor: '#1f2937'
+                backgroundColor: '#ffffff'
             };
             selectedComponentId = null;
             renderApp();
@@ -581,26 +662,40 @@
             }
         };
 
+        async function handleDeleteCard(cardId) {
+            if (!db || !userId) return;
+            if (confirm("¿Estás seguro de que quieres eliminar este perfil? Esta acción no se puede deshacer.")) {
+                try {
+                    await deleteDoc(doc(db, `artifacts/${appId}/users/${userId}/cards`, cardId));
+                    showModal("Perfil eliminado con éxito.");
+                    // The onSnapshot listener will automatically re-render the list
+                } catch (error) {
+                    console.error("Error deleting card: ", error);
+                    showModal("Error al eliminar el perfil.");
+                }
+            }
+        }
+        
         window.handleAddComponent = (type) => {
             if (!currentCard) return;
             if (['image', 'heading', 'text', 'socials'].includes(type) && currentCard.components.some(c => c.type === type)) {
-                alert(`El componente '${COMPONENT_TYPES[type].name}' ya existe en el perfil.`);
+                showModal(`El componente '${COMPONENT_TYPES[type].name}' ya existe en el perfil.`);
                 return;
             }
             const newComponent = { id: Date.now(), type, properties: {} };
             currentCard.components.push(newComponent);
             renderCanvas();
         };
-
-        window.setSelectedComponentId = (id) => {
+        
+        window.setSelectedComponentId = (id, subpart = null) => {
             selectedComponentId = id;
             renderPropertiesPanel();
-            document.querySelectorAll('.component-wrapper, img, h2, p').forEach(el => {
-                el.classList.remove('ring-2', 'ring-blue-500');
-            });
-            const targetElement = document.querySelector(`[onclick="setSelectedComponentId(${id})"]`);
-            if (targetElement) {
-                targetElement.classList.add('ring-2', 'ring-blue-500');
+            
+            // Visual feedback for selection
+            document.querySelectorAll('.component-wrapper').forEach(el => el.classList.remove('selected'));
+            const targetElement = document.querySelector(`[data-id='${id}']`);
+            if(targetElement) {
+                targetElement.classList.add('selected');
             }
         }
 
@@ -614,33 +709,50 @@
                     component.properties[property] = value;
                 }
             }
-            renderEditor();
+            renderCanvas();
+            // Re-render properties panel to keep focus and state
+            renderPropertiesPanel();
+            // Restore focus
+            const changedInput = document.getElementById(`prop-${property}`);
+            if (changedInput) {
+                changedInput.focus();
+                // Move cursor to the end
+                if (changedInput.type === 'text') {
+                    changedInput.setSelectionRange(changedInput.value.length, changedInput.value.length);
+                }
+            }
         };
-
+        
         async function handleSaveCard() {
             if (!db || !userId || !currentCard) {
-                alert("No se puede guardar. La base de datos no está conectada.");
+                showModal("No se puede guardar. La base de datos no está conectada.");
                 return;
             }
-
-            const cardData = { ...currentCard };
-            const cardId = cardData.id;
-            delete cardData.id;
+            
+            // Create a clean copy of the card data for saving
+            const cardDataToSave = {
+                name: currentCard.name,
+                template: currentCard.template,
+                backgroundColor: currentCard.backgroundColor,
+                components: currentCard.components,
+            };
 
             try {
-                if (cardId) {
-                    await setDoc(doc(db, `artifacts/${appId}/users/${userId}/cards`, cardId), cardData);
+                if (currentCard.id) {
+                    // Update existing document
+                    await setDoc(doc(db, `artifacts/${appId}/users/${userId}/cards`, currentCard.id), cardDataToSave);
                 } else {
-                    const docRef = await addDoc(collection(db, `artifacts/${appId}/users/${userId}/cards`), cardData);
-                    currentCard.id = docRef.id;
+                    // Create new document
+                    const docRef = await addDoc(collection(db, `artifacts/${appId}/users/${userId}/cards`), cardDataToSave);
+                    currentCard.id = docRef.id; // Update the current card with the new ID
                 }
-                alert("Perfil guardado con éxito!");
+                showModal("Perfil guardado con éxito!");
             } catch (error) {
                 console.error("Error al guardar el perfil: ", error);
-                alert("Hubo un error al guardar el perfil.");
+                showModal("Hubo un error al guardar el perfil.");
             }
         }
-
+        
         function handleDeleteComponent() {
             if (!currentCard || selectedComponentId === null) return;
             currentCard.components = currentCard.components.filter(c => c.id !== selectedComponentId);
@@ -649,6 +761,8 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            gsap.registerPlugin(ScrollTrigger);
+
             if (firebaseConfig.apiKey) {
                 const app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
@@ -665,7 +779,7 @@
                             querySnapshot.forEach((doc) => {
                                 savedCards.push({ id: doc.id, ...doc.data() });
                             });
-                            if (!currentCard && document.getElementById('template-selector-view').classList.contains('hidden') === false) {
+                            if(!currentCard && document.getElementById('template-selector-view').classList.contains('hidden') === false) {
                                 renderTemplateSelector();
                             }
                         });
@@ -678,7 +792,7 @@
                 userIdDisplay.textContent = "Desconectado";
                 savedCardsContainer.innerHTML = '<p class="text-gray-500">La persistencia está deshabilitada.</p>';
             }
-
+            
             const addComponentsPanel = document.getElementById('add-components-panel');
             Object.keys(COMPONENT_TYPES).forEach(type => {
                 const info = COMPONENT_TYPES[type];
@@ -691,12 +805,12 @@
 
             const startButtons = [document.getElementById('start-creating-btn-nav'), document.getElementById('start-creating-btn-hero'), document.getElementById('start-creating-btn-final')];
             startButtons.forEach(btn => btn.onclick = () => switchView('selector'));
-
+            
             document.getElementById('home-button').onclick = () => {
                 currentCard = null;
                 switchView('landing');
             };
-
+            
             document.getElementById('back-button').onclick = () => {
                 currentCard = null;
                 renderApp();
@@ -704,47 +818,69 @@
 
             document.getElementById('save-button').onclick = handleSaveCard;
             cardNameInput.oninput = (e) => {
-                if (currentCard) currentCard.name = e.target.value;
+                if(currentCard) currentCard.name = e.target.value;
             };
-
+            
             propertiesPanelContainer.addEventListener('click', (e) => {
                 if (e.target.id === 'delete-component-button') {
                     handleDeleteComponent();
                 }
             });
 
-            // Interactive Tab Section Logic
+            // --- ANIMATION LOGIC ---
+            initLandingPageAnimations();
+            initInteractiveTabs();
+
+            switchView('landing');
+        });
+
+        function initLandingPageAnimations() {
+            // GSAP Hero Animation
+            const tl = gsap.timeline({ defaults: { ease: "power3.out", duration: 1 } });
+            tl.fromTo('section.hero-gradient h1', { opacity: 0, y: 40 }, { opacity: 1, y: 0, delay: 0.2 });
+            tl.fromTo('section.hero-gradient p', { opacity: 0, y: 30 }, { opacity: 1, y: 0 }, "-=0.8");
+            tl.fromTo('section.hero-gradient button', { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1 }, "-=0.8");
+
+            gsap.set('#card1', { opacity: 0, x: -100, y: 50, rotation: -25 });
+            gsap.set('#card2', { opacity: 0, scale: 0.7 });
+            gsap.set('#card3', { opacity: 0, x: 100, y: 50, rotation: 25 });
+
+            tl.to('#card1', { opacity: 1, x: -110, y: -50, rotation: -15, duration: 1.2 }, "-=0.5");
+            tl.to('#card3', { opacity: 1, x: 110, y: -30, rotation: 15, duration: 1.2 }, "<");
+            tl.to('#card2', { opacity: 1, scale: 1, duration: 1 }, "-=0.8");
+
+            // Mouse move parallax effect on hero cards
+            const heroCardsContainer = document.getElementById('hero-cards-container');
+            heroCardsContainer.addEventListener('mousemove', (e) => {
+                let rect = heroCardsContainer.getBoundingClientRect();
+                let x = e.clientX - rect.left;
+                let y = e.clientY - rect.top;
+                let dx = (x - rect.width / 2) / (rect.width / 2);
+                let dy = (y - rect.height / 2) / (rect.height / 2);
+
+                gsap.to('#card1', { x: -110 - dx * 20, y: -50 - dy * 20, rotation: -15 - dx * 5, ease: 'power2.out', duration: 0.5 });
+                gsap.to('#card2', { x: -dx * 5, y: -dy * 5, ease: 'power2.out', duration: 0.5 });
+                gsap.to('#card3', { x: 110 - dx * 20, y: -30 - dy * 20, rotation: 15 - dx * 5, ease: 'power2.out', duration: 0.5 });
+            });
+
+            // Intersection Observer for scroll animations
+            const animatedElements = document.querySelectorAll('[data-animate]');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            animatedElements.forEach(el => observer.observe(el));
+        }
+
+        function initInteractiveTabs() {
             const tabsData = [
-                {
-                    name: "Representantes de Ventas",
-                    title: "Supera tus objetivos de ventas",
-                    description: "Deja que tu tarjeta de visita digital venda por ti. Impresiona a tus prospectos al instante y convierte a tus contactos en clientes leales.",
-                    features: [
-                        "Comparte demos de producto y testimonios interactivos al instante.",
-                        "Integra sin problemas con sistemas CRM para el seguimiento de leads.",
-                        "Actualiza tu pitch de ventas en tiempo real para mantenerte por delante de la competencia."
-                    ]
-                },
-                {
-                    name: "Fundadores y VCs",
-                    title: "Conecta con Inversores Clave",
-                    description: "Tu próxima ronda de financiación está a una conexión de distancia. Presenta tu visión de forma clara y profesional.",
-                    features: [
-                        "Comparte tu pitch deck y métricas clave de forma segura.",
-                        "Facilita la programación de reuniones con un solo clic.",
-                        "Deja una impresión memorable y profesional en cada encuentro."
-                    ]
-                },
-                {
-                    name: "Marketing y Gestores de Marca",
-                    title: "Unifica la Imagen de tu Marca",
-                    description: "Asegura que cada interacción refleje la identidad de tu marca. Gestiona todas las tarjetas de tu equipo desde un panel centralizado.",
-                    features: [
-                        "Mantén la consistencia de marca en todas las tarjetas del equipo.",
-                        "Mide el ROI de tus eventos de networking con analíticas detalladas.",
-                        "Actualiza promociones y campañas en todas las tarjetas al instante."
-                    ]
-                }
+                { name: "Representantes de Ventas", title: "Supera tus objetivos de ventas", description: "Deja que tu tarjeta de visita digital venda por ti. Impresiona a tus prospectos al instante y convierte a tus contactos en clientes leales.", features: ["Comparte demos de producto y testimonios interactivos al instante.", "Integra sin problemas con sistemas CRM para el seguimiento de leads.", "Actualiza tu pitch de ventas en tiempo real para mantenerte por delante de la competencia."] },
+                { name: "Fundadores y VCs", title: "Conecta con Inversores Clave", description: "Tu próxima ronda de financiación está a una conexión de distancia. Presenta tu visión de forma clara y profesional.", features: ["Comparte tu pitch deck y métricas clave de forma segura.", "Facilita la programación de reuniones con un solo clic.", "Deja una impresión memorable y profesional en cada encuentro."] },
+                { name: "Marketing y Gestores de Marca", title: "Unifica la Imagen de tu Marca", description: "Asegura que cada interacción refleje la identidad de tu marca. Gestiona todas las tarjetas de tu equipo desde un panel centralizado.", features: ["Mantén la consistencia de marca en todas las tarjetas del equipo.", "Mide el ROI de tus eventos de networking con analíticas detalladas.", "Actualiza promociones y campañas en todas las tarjetas al instante."] }
             ];
 
             const tabsNav = document.getElementById('tabs-nav');
@@ -758,12 +894,15 @@
                 tabsNav.appendChild(button);
 
                 const content = document.createElement('div');
+                content.className = 'absolute inset-0 p-8 transition-all duration-500 ease-in-out';
                 content.dataset.tabContent = index;
-                if (index !== 0) content.classList.add('hidden');
+                if(index !== 0) {
+                    content.classList.add('opacity-0', 'transform', 'translate-y-5');
+                }
                 content.innerHTML = `
                     <h3 class="text-3xl font-bold text-white mb-4">${tab.title}</h3>
                     <p class="text-gray-400 mb-8">${tab.description}</p>
-                    <div class="grid md:grid-cols-2 gap-8">
+                    <div class="grid md:grid-cols-2 gap-8 items-center">
                         <div class="flex justify-center items-center">
                              <div class="relative mx-auto border-gray-700 bg-gray-800 border-[10px] rounded-[2rem] h-[400px] w-[200px] shadow-xl">
                                 <div class="rounded-[1.5rem] overflow-hidden w-full h-full bg-white text-gray-800 text-xs p-2">
@@ -793,20 +932,21 @@
             tabsNav.addEventListener('click', (e) => {
                 if (e.target.classList.contains('tab-button')) {
                     const tabIndex = e.target.dataset.tab;
-
+                    
                     tabsNav.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
                     e.target.classList.add('active');
 
                     tabsContent.querySelectorAll('[data-tab-content]').forEach(content => {
-                        content.classList.add('hidden');
+                        if (content.dataset.tabContent === tabIndex) {
+                            content.classList.remove('opacity-0', 'translate-y-5');
+                        } else {
+                            content.classList.add('opacity-0', 'translate-y-5');
+                        }
                     });
-                    tabsContent.querySelector(`[data-tab-content="${tabIndex}"]`).classList.remove('hidden');
                 }
             });
+        }
 
-            switchView('landing');
-        });
     </script>
 </body>
-
 </html>

@@ -14,10 +14,11 @@
 
     <style>
         /* Estilos personalizados */
-        body {
+        body, html {
             font-family: 'Inter', sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden; /* Previene el scroll horizontal */
         }
         .hidden {
             display: none;
@@ -123,7 +124,9 @@
     <div id="custom-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center p-4" onclick="closeModal()">
         <div id="custom-modal-content" class="bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-sm text-center transform scale-95" onclick="event.stopPropagation()">
             <p id="modal-message" class="text-white text-lg mb-6">Message here</p>
-            <button id="modal-close-btn" class="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 transition-colors">Cerrar</button>
+            <div id="modal-buttons" class="flex justify-center gap-4">
+                 <button id="modal-close-btn" class="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 transition-colors">Cerrar</button>
+            </div>
         </div>
     </div>
 
@@ -174,7 +177,7 @@
             </div>
         </section>
 
-        <!-- Other sections remain the same... -->
+        <!-- Other sections -->
         <section class="py-24 px-6 bg-black">
             <div class="container mx-auto grid md:grid-cols-2 gap-16 items-center">
                  <div data-animate="slide-in-right" class="md:order-2">
@@ -372,7 +375,7 @@
             </aside>
             
             <!-- Overlay for mobile sidebars -->
-            <div id="editor-overlay" class="hidden lg:hidden fixed inset-0 bg-black/50 z-20" onclick="closeSidebars()"></div>
+            <div id="editor-overlay" class="hidden lg:hidden fixed inset-0 bg-black/50 z-20"></div>
         </div>
     </div>
 
@@ -414,10 +417,30 @@
         const modal = document.getElementById('custom-modal');
         const modalContent = document.getElementById('custom-modal-content');
         const modalMessage = document.getElementById('modal-message');
-        const modalCloseBtn = document.getElementById('modal-close-btn');
+        const modalButtons = document.getElementById('modal-buttons');
 
         function showModal(message) {
             modalMessage.textContent = message;
+            modalButtons.innerHTML = `<button id="modal-close-btn" class="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 transition-colors">Cerrar</button>`;
+            document.getElementById('modal-close-btn').onclick = closeModal;
+            modal.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                modal.classList.add('opacity-100');
+                modalContent.classList.add('scale-100');
+            });
+        }
+        
+        function showConfirmationModal(message, onConfirm) {
+            modalMessage.textContent = message;
+            modalButtons.innerHTML = `
+                <button id="modal-cancel-btn" class="bg-gray-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-500 transition-colors">Cancelar</button>
+                <button id="modal-confirm-btn" class="bg-red-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-red-700 transition-colors">Confirmar</button>
+            `;
+            document.getElementById('modal-cancel-btn').onclick = closeModal;
+            document.getElementById('modal-confirm-btn').onclick = () => {
+                closeModal();
+                onConfirm();
+            };
             modal.classList.remove('hidden');
             requestAnimationFrame(() => {
                 modal.classList.add('opacity-100');
@@ -430,7 +453,6 @@
             modalContent.classList.remove('scale-100');
             setTimeout(() => modal.classList.add('hidden'), 300);
         }
-        modalCloseBtn.onclick = closeModal;
 
         function switchView(viewName) {
             Object.values(views).forEach(v => v.classList.add('hidden'));
@@ -550,10 +572,8 @@
                         const draggableComponents = currentCard.components.filter(c => ['button', 'socials'].includes(c.type));
                         const movedItem = draggableComponents[evt.oldDraggableIndex];
                         
-                        // Remove from original position
                         currentCard.components = currentCard.components.filter(c => c.id !== movedItem.id);
 
-                        // Find new position
                         const newPositionInDraggables = evt.newDraggableIndex;
                         if (newPositionInDraggables >= draggableComponents.length -1) {
                              currentCard.components.push(movedItem);
@@ -686,17 +706,20 @@
             }
         };
 
-        async function handleDeleteCard(cardId) {
+        function handleDeleteCard(cardId) {
             if (!db || !userId) return;
-            if (confirm("¿Estás seguro de que quieres eliminar este perfil? Esta acción no se puede deshacer.")) {
-                try {
-                    await deleteDoc(doc(db, `artifacts/${appId}/users/${userId}/cards`, cardId));
-                    showModal("Perfil eliminado con éxito.");
-                } catch (error) {
-                    console.error("Error deleting card: ", error);
-                    showModal("Error al eliminar el perfil.");
+            showConfirmationModal(
+                "¿Estás seguro de que quieres eliminar este perfil? Esta acción no se puede deshacer.",
+                async () => {
+                    try {
+                        await deleteDoc(doc(db, `artifacts/${appId}/users/${userId}/cards`, cardId));
+                        showModal("Perfil eliminado con éxito.");
+                    } catch (error) {
+                        console.error("Error deleting card: ", error);
+                        showModal("Error al eliminar el perfil.");
+                    }
                 }
-            }
+            );
         }
         
         window.handleAddComponent = (type) => {
@@ -766,9 +789,14 @@
         
         function handleDeleteComponent() {
             if (!currentCard || selectedComponentId === null) return;
-            currentCard.components = currentCard.components.filter(c => c.id !== selectedComponentId);
-            selectedComponentId = null;
-            renderApp();
+            showConfirmationModal(
+                "¿Estás seguro de que quieres eliminar este componente?",
+                () => {
+                    currentCard.components = currentCard.components.filter(c => c.id !== selectedComponentId);
+                    selectedComponentId = null;
+                    renderApp();
+                }
+            );
         }
 
         // --- Editor Sidebar Logic ---
@@ -834,7 +862,7 @@
                 if (e.target.id === 'delete-component-button') handleDeleteComponent();
             });
 
-            // Sidebar Toggles
+            // Sidebar Toggles & Overlay
             document.getElementById('toggle-components-panel').onclick = () => {
                 propertiesPanel.classList.remove('is-open');
                 componentsPanel.classList.toggle('is-open');
@@ -845,6 +873,7 @@
                 propertiesPanel.classList.toggle('is-open');
                 editorOverlay.classList.toggle('hidden', !propertiesPanel.classList.contains('is-open'));
             };
+            editorOverlay.onclick = closeSidebars;
 
             initLandingPageAnimations();
             initInteractiveTabs();

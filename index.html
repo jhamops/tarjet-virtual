@@ -90,18 +90,30 @@
             border: 2px solid transparent;
             border-radius: 0.5rem;
             transition: border-color 0.2s;
-            pointer-events: none; /* Allows clicks to go through to the element */
+            pointer-events: none;
         }
         .component-wrapper.selected .component-overlay {
-            border-color: #3b82f6; /* blue-500 */
+            border-color: #3b82f6;
         }
 
-        /* Custom Modal for Alerts */
-        #custom-modal {
+        /* Modal y Sidebars responsivas */
+        #custom-modal, .editor-sidebar {
             transition: opacity 0.3s ease-in-out;
         }
-        #custom-modal-content {
+        #custom-modal-content, .editor-sidebar > div {
             transition: transform 0.3s ease-in-out;
+        }
+        .editor-sidebar {
+            transform: translateX(-100%);
+        }
+        .editor-sidebar.is-open {
+            transform: translateX(0);
+        }
+        #properties-panel-container.editor-sidebar {
+            transform: translateX(100%);
+        }
+        #properties-panel-container.editor-sidebar.is-open {
+            transform: translateX(0);
         }
     </style>
 </head>
@@ -139,13 +151,13 @@
                 <div id="hero-cards-container" class="relative h-[400px] md:h-[500px]">
                     <!-- Card Mockups -->
                     <div id="card1" class="card-mockup absolute w-[220px] h-auto bg-white rounded-xl shadow-2xl p-4 top-1/2 left-1/2">
-                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=1780&auto=format&fit=crop" class="w-16 h-16 rounded-full mx-auto mb-2 border-2 border-blue-500" alt="Foto de perfil de Alex Thompson">
+                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=1780&auto=format&fit=crop" onerror="this.onerror=null;this.src='https://placehold.co/100x100/e2e8f0/cbd5e0?text=Foto';" class="w-16 h-16 rounded-full mx-auto mb-2 border-2 border-blue-500" alt="Foto de perfil de Alex Thompson">
                         <p class="text-center font-bold text-gray-800">Alex Thompson</p>
                         <p class="text-center text-sm text-gray-500">Product Manager</p>
                     </div>
                     <div id="card2" class="card-mockup absolute w-[250px] h-auto bg-gray-800 rounded-2xl shadow-2xl p-5 top-1/2 left-1/2 z-10">
                         <div class="flex items-center gap-4 mb-4">
-                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop" class="w-16 h-16 rounded-full object-cover border-2 border-white" alt="Foto de perfil de Sophia Kub">
+                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop" onerror="this.onerror=null;this.src='https://placehold.co/100x100/e2e8f0/cbd5e0?text=Foto';" class="w-16 h-16 rounded-full object-cover border-2 border-white" alt="Foto de perfil de Sophia Kub">
                             <div>
                                 <p class="font-bold text-white">Sophia Kub</p>
                                 <p class="text-sm text-gray-400">Marketing Director</p>
@@ -162,7 +174,7 @@
             </div>
         </section>
 
-        <!-- New Feature Section -->
+        <!-- Other sections remain the same... -->
         <section class="py-24 px-6 bg-black">
             <div class="container mx-auto grid md:grid-cols-2 gap-16 items-center">
                  <div data-animate="slide-in-right" class="md:order-2">
@@ -171,7 +183,6 @@
                     <p class="text-gray-400 text-lg">Con nuestros formularios integrados en tu tarjeta digital, captura la información de contacto de tus prospectos sobre la marcha. Sin interrupciones y en solo unos clics.</p>
                 </div>
                 <div data-animate="slide-in-left" class="md:order-1 flex justify-center">
-                     <!-- Phone Mockup -->
                     <div class="relative h-96 w-96">
                         <img src="https://placehold.co/300x600/111827/ffffff?text=Perfil+1" alt="Tarjeta de perfil 1" class="absolute rounded-3xl w-48 top-0 left-1/2 -translate-x-1/2 rotate-[-10deg] shadow-2xl transition-transform duration-300 hover:scale-105 hover:rotate-[-12deg] hover:z-20">
                         <img src="https://placehold.co/300x600/1f2937/ffffff?text=Perfil+2" alt="Tarjeta de perfil 2" class="absolute rounded-3xl w-48 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 shadow-2xl transition-transform duration-300 hover:scale-105 hover:z-20">
@@ -180,8 +191,6 @@
                 </div>
             </div>
         </section>
-
-        <!-- Simplified CTA Section -->
         <section class="py-24 px-6 bg-black text-center" data-animate="fade-in-up">
             <div class="container mx-auto">
                  <h2 class="text-4xl font-bold text-white mb-4">Tarjetas de Negocio Digitales. <br> Gestión de contactos simplificado.</h2>
@@ -189,24 +198,16 @@
                  <button class="bg-blue-600 text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-blue-700">Pedir Demo</button>
             </div>
         </section>
-
-        <!-- Interactive Tab Section -->
         <section class="py-24 px-6 feature-gradient" data-animate="fade-in-up">
             <div class="container mx-auto">
                 <div class="grid md:grid-cols-12 gap-8">
                     <div class="md:col-span-3">
-                        <div id="tabs-nav" class="flex flex-col space-y-2">
-                            <!-- Tab buttons will be inserted here by JS -->
-                        </div>
+                        <div id="tabs-nav" class="flex flex-col space-y-2"></div>
                     </div>
-                    <div id="tabs-content" class="md:col-span-9 bg-gray-800/50 p-8 rounded-lg min-h-[450px] relative">
-                        <!-- Tab content will be inserted here by JS -->
-                    </div>
+                    <div id="tabs-content" class="md:col-span-9 bg-gray-800/50 p-8 rounded-lg min-h-[450px] relative"></div>
                 </div>
             </div>
         </section>
-
-        <!-- Plans Section -->
         <section class="py-24 px-6 bg-black" data-animate="fade-in-up">
             <div class="container mx-auto text-center">
                 <h2 class="text-4xl font-bold text-white mb-4">Comienza Contigo</h2>
@@ -235,8 +236,6 @@
                 </div>
             </div>
         </section>
-
-        <!-- Testimonials Section -->
         <section class="py-24 px-6 feature-gradient" data-animate="fade-in-up">
             <div class="container mx-auto max-w-5xl text-center">
                 <h2 class="text-4xl font-bold text-white mb-12">Lo que dicen nuestros usuarios</h2>
@@ -254,8 +253,6 @@
                 </div>
             </div>
         </section>
-
-        <!-- Enterprise Section -->
         <section class="py-24 px-6 bg-black relative overflow-hidden" data-animate="fade-in-up">
             <div class="globe-bg"></div>
             <div class="container mx-auto max-w-5xl relative z-10">
@@ -274,8 +271,6 @@
                 </div>
             </div>
         </section>
-
-        <!-- Final CTA Section -->
         <section class="py-20 px-6 hero-gradient">
             <div class="container mx-auto text-center">
                 <h2 class="text-4xl font-bold text-white mb-4">Listo para Transformar tu Networking?</h2>
@@ -285,7 +280,6 @@
                 </button>
             </div>
         </section>
-
         <footer class="text-center py-6 bg-black text-gray-400">
             <p>&copy; 2025 LinkUpCard. Todos los derechos reservados.</p>
         </footer>
@@ -297,7 +291,6 @@
         <div class="w-full max-w-4xl">
             <h1 class="text-4xl font-bold text-center text-white mb-2">Crea tu Perfil Digital LinkUpCard</h1>
             <p class="text-center text-gray-400 mb-8 max-w-2xl mx-auto">Tu tarjeta de presentación digital, siempre actualizada. Elige una plantilla para empezar o carga un perfil existente.</p>
-            
             <div class="grid md:grid-cols-2 gap-8 mb-12">
                 <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700">
                     <h2 class="text-2xl font-semibold mb-4 text-white">Crear Nuevo Perfil</h2>
@@ -313,7 +306,6 @@
                         </button>
                     </div>
                 </div>
-
                 <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700">
                     <h2 class="text-2xl font-semibold mb-4 text-white">Mis Perfiles Guardados</h2>
                     <div id="saved-cards-container" class="space-y-2 max-h-60 overflow-y-auto">
@@ -328,26 +320,59 @@
     </div>
 
     <!-- App: Editor View -->
-    <div id="editor-view" class="hidden flex flex-col h-screen font-sans bg-black text-white">
-        <header class="flex items-center justify-between p-2 bg-gray-900 border-b border-gray-700 shadow-sm">
-            <button id="back-button" class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600">← Volver</button>
-            <input type="text" id="card-name-input" class="text-lg font-semibold bg-transparent border-b-2 border-transparent focus:border-blue-500 outline-none mx-4 flex-grow" placeholder="Nombre de tu Perfil"/>
-            <button id="save-button" class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-                Guardar Perfil
-            </button>
+    <div id="editor-view" class="hidden flex flex-col h-screen font-sans bg-gray-900 text-white">
+        <!-- Editor Header -->
+        <header class="flex items-center justify-between p-2 md:p-3 bg-gray-900 border-b border-gray-700 shadow-sm z-20">
+            <div class="flex items-center gap-2">
+                <button id="back-button" class="px-3 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                </button>
+                <button id="toggle-components-panel" class="lg:hidden px-3 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                </button>
+            </div>
+            <input type="text" id="card-name-input" class="text-lg font-semibold bg-transparent text-center border-b-2 border-transparent focus:border-blue-500 outline-none mx-2 flex-grow min-w-0" placeholder="Nombre de tu Perfil"/>
+            <div class="flex items-center gap-2">
+                <button id="toggle-properties-panel" class="lg:hidden px-3 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                </button>
+                <button id="save-button" class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden sm:inline"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                    <span class="hidden sm:inline">Guardar</span>
+                    <span class="sm:hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                    </span>
+                </button>
+            </div>
         </header>
-        <div class="flex flex-grow overflow-hidden">
-            <aside class="w-60 bg-gray-900 p-4 border-r border-gray-700 overflow-y-auto">
-                <h3 class="text-lg font-semibold mb-4">Añadir Componentes</h3>
-                <div id="add-components-panel" class="space-y-2"></div>
+
+        <div class="flex flex-grow overflow-hidden relative">
+            <!-- Components Panel (Sidebar Left) -->
+            <aside id="components-panel" class="editor-sidebar absolute lg:relative inset-y-0 left-0 z-30 lg:z-auto w-64 lg:w-60 bg-gray-800 border-r border-gray-700 shadow-lg lg:shadow-none transition-transform duration-300 ease-in-out">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold mb-4">Añadir Componentes</h3>
+                    <div id="add-components-panel" class="space-y-2"></div>
+                </div>
             </aside>
-            <main class="flex-1 p-8 overflow-y-auto bg-black flex justify-center items-start">
-                <div id="canvas-container" class="w-full max-w-md bg-white rounded-xl shadow-lg overflow-hidden">
-                    <!-- El lienzo se renderizará aquí -->
+
+            <!-- Main Canvas -->
+            <main class="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto bg-gray-900 flex justify-center items-start">
+                <div class="w-full max-w-md">
+                    <div id="canvas-container" class="bg-white rounded-xl shadow-lg overflow-hidden mx-auto">
+                        <!-- El lienzo se renderizará aquí -->
+                    </div>
                 </div>
             </main>
-            <aside id="properties-panel-container" class="w-80 bg-gray-900 p-4 border-l border-gray-700 overflow-y-auto"></aside>
+
+            <!-- Properties Panel (Sidebar Right) -->
+            <aside id="properties-panel-container" class="editor-sidebar absolute lg:relative inset-y-0 right-0 z-30 lg:z-auto w-72 lg:w-80 bg-gray-800 border-l border-gray-700 shadow-lg lg:shadow-none transition-transform duration-300 ease-in-out">
+                <div class="p-4 overflow-y-auto h-full">
+                    <!-- Las propiedades se renderizarán aquí -->
+                </div>
+            </aside>
+            
+            <!-- Overlay for mobile sidebars -->
+            <div id="editor-overlay" class="hidden lg:hidden fixed inset-0 bg-black/50 z-20" onclick="closeSidebars()"></div>
         </div>
     </div>
 
@@ -380,7 +405,7 @@
             editor: document.getElementById('editor-view'),
         };
         const canvasContainer = document.getElementById('canvas-container');
-        const propertiesPanelContainer = document.getElementById('properties-panel-container');
+        const propertiesPanelContainer = document.querySelector('#properties-panel-container > div');
         const savedCardsContainer = document.getElementById('saved-cards-container');
         const cardNameInput = document.getElementById('card-name-input');
         const userIdDisplay = document.getElementById('user-id-display');
@@ -394,17 +419,16 @@
         function showModal(message) {
             modalMessage.textContent = message;
             modal.classList.remove('hidden');
-            modal.classList.add('opacity-100');
-            modalContent.classList.add('scale-100');
+            requestAnimationFrame(() => {
+                modal.classList.add('opacity-100');
+                modalContent.classList.add('scale-100');
+            });
         }
 
         function closeModal() {
-            modal.classList.add('opacity-0');
+            modal.classList.remove('opacity-100');
             modalContent.classList.remove('scale-100');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-                modal.classList.remove('opacity-0');
-            }, 300);
+            setTimeout(() => modal.classList.add('hidden'), 300);
         }
         modalCloseBtn.onclick = closeModal;
 
@@ -461,24 +485,24 @@
         }
 
         function renderCanvas() {
-            canvasContainer.innerHTML = ''; // Limpiar contenedor principal
+            canvasContainer.innerHTML = ''; 
 
             const cardWrapper = document.createElement('div');
             cardWrapper.style.backgroundColor = currentCard.backgroundColor || '#ffffff';
-            cardWrapper.className = 'text-gray-800';
+            cardWrapper.className = 'text-gray-800 rounded-xl overflow-hidden';
 
             const profileImageComponent = currentCard.components.find(c => c.type === 'image');
             const headerImageUrl = profileImageComponent?.properties.headerSrc || 'https://placehold.co/400x150/3b82f6/ffffff?text=Banner';
 
             let headerHTML = `
-                <div class="h-36 bg-cover bg-center relative cursor-pointer" style="background-image: url('${headerImageUrl}')" onclick="setSelectedComponentId(${profileImageComponent?.id}, 'header')">
-                    ${profileImageComponent ? `<img src="${profileImageComponent.properties.src || 'https://placehold.co/100x100/e2e8f0/cbd5e0?text=Foto'}" class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg absolute -bottom-12 left-1/2 -translate-x-1/2 cursor-pointer" onclick="event.stopPropagation(); setSelectedComponentId(${profileImageComponent.id}, 'profile')">` : ''}
+                <div class="component-wrapper h-36 bg-cover bg-center relative" data-id="${profileImageComponent?.id}" onclick="setSelectedComponentId(${profileImageComponent?.id})">
+                    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('${headerImageUrl}')"></div>
+                    ${profileImageComponent ? `<img src="${profileImageComponent.properties.src || 'https://placehold.co/100x100/e2e8f0/cbd5e0?text=Foto'}" onerror="this.onerror=null;this.src='https://placehold.co/100x100/e2e8f0/cbd5e0?text=Foto';" class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg absolute -bottom-12 left-1/2 -translate-x-1/2">` : ''}
                     <div class="component-overlay"></div>
                 </div>
             `;
             
-            let bodyHTML = `<div class="pt-16 p-6 text-center">`;
-            // Only render non-draggable main components here
+            let bodyHTML = `<div class="pt-16 p-6 text-center space-y-2">`;
             const headingComponent = currentCard.components.find(c => c.type === 'heading');
             if (headingComponent) {
                 bodyHTML += `<div class="component-wrapper" data-id="${headingComponent.id}" onclick="setSelectedComponentId(${headingComponent.id})"><h2 class="text-2xl font-bold text-gray-800">${headingComponent.properties.text || 'Tu Nombre'}</h2><div class="component-overlay"></div></div>`;
@@ -493,7 +517,6 @@
             componentsContainer.id = 'sortable-components';
             componentsContainer.className = 'px-6 pb-6 space-y-4';
 
-            // Render draggable components
             currentCard.components.filter(c => ['button', 'socials'].includes(c.type)).forEach(component => {
                 componentsContainer.innerHTML += renderComponent(component);
             });
@@ -510,40 +533,44 @@
             cardWrapper.innerHTML += qrHTML;
             canvasContainer.appendChild(cardWrapper);
             
-            // Re-highlight selected component
             if (selectedComponentId) {
                 const el = canvasContainer.querySelector(`[data-id='${selectedComponentId}']`);
                 if (el) el.classList.add('selected');
             }
 
-            // Initialize SortableJS for drag and drop
             const sortableContainer = document.getElementById('sortable-components');
             if (sortableContainer) {
+                if (sortableInstance) sortableInstance.destroy();
                 sortableInstance = new Sortable(sortableContainer, {
                     animation: 150,
                     ghostClass: 'sortable-ghost',
                     chosenClass: 'sortable-chosen',
                     onEnd: function (evt) {
                         const componentId = evt.item.dataset.id;
-                        const oldIndex = currentCard.components.findIndex(c => c.id == componentId);
-                        const newIndexOffset = currentCard.components.filter(c => !['button', 'socials'].includes(c.type)).length;
-                        const newIndex = newIndexOffset + evt.newDraggableIndex;
+                        const draggableComponents = currentCard.components.filter(c => ['button', 'socials'].includes(c.type));
+                        const movedItem = draggableComponents[evt.oldDraggableIndex];
+                        
+                        // Remove from original position
+                        currentCard.components = currentCard.components.filter(c => c.id !== movedItem.id);
 
-                        // Reorder the array
-                        const [movedItem] = currentCard.components.splice(oldIndex, 1);
-                        currentCard.components.splice(newIndex, 0, movedItem);
-
-                        renderCanvas(); // Re-render to reflect the change
+                        // Find new position
+                        const newPositionInDraggables = evt.newDraggableIndex;
+                        if (newPositionInDraggables >= draggableComponents.length -1) {
+                             currentCard.components.push(movedItem);
+                        } else {
+                            const componentAfter = draggableComponents[newPositionInDraggables];
+                            const finalNewIndex = currentCard.components.findIndex(c => c.id === componentAfter.id);
+                            currentCard.components.splice(finalNewIndex, 0, movedItem);
+                        }
+                        
+                        renderCanvas();
                     },
                 });
             }
         }
 
         function renderComponent(component) {
-            let elementHTML = '';
-            
-            // Wrapper for selection and dragging
-            elementHTML += `<div class="component-wrapper" data-id="${component.id}" onclick="setSelectedComponentId(${component.id})">`;
+            let elementHTML = `<div class="component-wrapper" data-id="${component.id}" onclick="setSelectedComponentId(${component.id})">`;
             
             switch (component.type) {
                 case 'button':
@@ -559,7 +586,6 @@
                     elementHTML += `</div>`;
                     break;
             }
-            // Add the overlay for selection indication
             elementHTML += '<div class="component-overlay"></div></div>';
             return elementHTML;
         }
@@ -598,7 +624,7 @@
                         break;
                 }
                 
-                if (!['image', 'heading', 'text', 'socials'].includes(selectedComponent.type)) {
+                if (!['image', 'heading', 'text'].includes(selectedComponent.type)) {
                     content += `<button id="delete-component-button" class="w-full mt-4 flex items-center justify-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">Eliminar Componente</button></div>`;
                 } else {
                      content += '</div>';
@@ -618,29 +644,27 @@
             const id = `prop-${prop}`;
             return `<div class="space-y-1 mb-2">
                         <label for="${id}" class="block text-sm font-medium text-gray-400">${label}</label>
-                        <input type="text" id="${id}" value="${value}" oninput="handlePropertyChange('${prop}', this.value, ${isCardProp})" class="mt-1 block w-full rounded-md bg-gray-800 border-gray-600 shadow-sm p-2 text-white focus:ring-blue-500 focus:border-blue-500">
+                        <input type="text" id="${id}" value="${value}" oninput="handlePropertyChange('${prop}', this.value, ${isCardProp})" class="mt-1 block w-full rounded-md bg-gray-700 border-gray-600 shadow-sm p-2 text-white focus:ring-blue-500 focus:border-blue-500">
                     </div>`;
         }
         function createTextareaInput(prop, label, value) {
             const id = `prop-${prop}`;
             return `<div class="space-y-1 mb-2">
                         <label for="${id}" class="block text-sm font-medium text-gray-400">${label}</label>
-                        <textarea id="${id}" oninput="handlePropertyChange('${prop}', this.value)" rows="2" class="mt-1 block w-full rounded-md bg-gray-800 border-gray-600 shadow-sm p-2 text-white focus:ring-blue-500 focus:border-blue-500">${value}</textarea>
+                        <textarea id="${id}" oninput="handlePropertyChange('${prop}', this.value)" rows="2" class="mt-1 block w-full rounded-md bg-gray-700 border-gray-600 shadow-sm p-2 text-white focus:ring-blue-500 focus:border-blue-500">${value}</textarea>
                     </div>`;
         }
         function createColorInput(prop, label, value, isCardProp = false) {
             const id = `prop-${prop}`;
             return `<div class="space-y-1 mb-2">
                         <label for="${id}" class="block text-sm font-medium text-gray-400">${label}</label>
-                        <input type="color" id="${id}" value="${value}" oninput="handlePropertyChange('${prop}', this.value, ${isCardProp})" class="mt-1 block w-full h-10 rounded-md border-gray-600 shadow-sm p-0">
+                        <input type="color" id="${id}" value="${value}" oninput="handlePropertyChange('${prop}', this.value, ${isCardProp})" class="mt-1 block w-full h-10 rounded-md border-gray-600 shadow-sm p-0 bg-gray-700">
                     </div>`;
         }
         
         window.handleCreateNewCard = (template) => {
             currentCard = {
-                id: null,
-                name: 'Mi Perfil Digital',
-                template: template,
+                id: null, name: 'Mi Perfil Digital', template: template,
                 components: [
                     {id: Date.now() + 1, type: 'image', properties: {}},
                     {id: Date.now() + 2, type: 'heading', properties: {}},
@@ -668,7 +692,6 @@
                 try {
                     await deleteDoc(doc(db, `artifacts/${appId}/users/${userId}/cards`, cardId));
                     showModal("Perfil eliminado con éxito.");
-                    // The onSnapshot listener will automatically re-render the list
                 } catch (error) {
                     console.error("Error deleting card: ", error);
                     showModal("Error al eliminar el perfil.");
@@ -687,11 +710,9 @@
             renderCanvas();
         };
         
-        window.setSelectedComponentId = (id, subpart = null) => {
+        window.setSelectedComponentId = (id) => {
             selectedComponentId = id;
             renderPropertiesPanel();
-            
-            // Visual feedback for selection
             document.querySelectorAll('.component-wrapper').forEach(el => el.classList.remove('selected'));
             const targetElement = document.querySelector(`[data-id='${id}']`);
             if(targetElement) {
@@ -705,19 +726,14 @@
                 currentCard[property] = value;
             } else {
                 const component = currentCard.components.find(c => c.id === selectedComponentId);
-                if (component) {
-                    component.properties[property] = value;
-                }
+                if (component) component.properties[property] = value;
             }
             renderCanvas();
-            // Re-render properties panel to keep focus and state
             renderPropertiesPanel();
-            // Restore focus
-            const changedInput = document.getElementById(`prop-${property}`);
+            const changedInput = document.getElementById(`prop-${prop}`);
             if (changedInput) {
                 changedInput.focus();
-                // Move cursor to the end
-                if (changedInput.type === 'text') {
+                if (changedInput.type === 'text' || changedInput.type === 'textarea') {
                     changedInput.setSelectionRange(changedInput.value.length, changedInput.value.length);
                 }
             }
@@ -728,23 +744,18 @@
                 showModal("No se puede guardar. La base de datos no está conectada.");
                 return;
             }
-            
-            // Create a clean copy of the card data for saving
             const cardDataToSave = {
                 name: currentCard.name,
                 template: currentCard.template,
                 backgroundColor: currentCard.backgroundColor,
                 components: currentCard.components,
             };
-
             try {
                 if (currentCard.id) {
-                    // Update existing document
                     await setDoc(doc(db, `artifacts/${appId}/users/${userId}/cards`, currentCard.id), cardDataToSave);
                 } else {
-                    // Create new document
                     const docRef = await addDoc(collection(db, `artifacts/${appId}/users/${userId}/cards`), cardDataToSave);
-                    currentCard.id = docRef.id; // Update the current card with the new ID
+                    currentCard.id = docRef.id;
                 }
                 showModal("Perfil guardado con éxito!");
             } catch (error) {
@@ -760,6 +771,17 @@
             renderApp();
         }
 
+        // --- Editor Sidebar Logic ---
+        const componentsPanel = document.getElementById('components-panel');
+        const propertiesPanel = document.getElementById('properties-panel-container');
+        const editorOverlay = document.getElementById('editor-overlay');
+
+        function closeSidebars() {
+            componentsPanel.classList.remove('is-open');
+            propertiesPanel.classList.remove('is-open');
+            editorOverlay.classList.add('hidden');
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             gsap.registerPlugin(ScrollTrigger);
 
@@ -767,7 +789,6 @@
                 const app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
                 auth = getAuth(app);
-
                 onAuthStateChanged(auth, user => {
                     if (user) {
                         userId = user.uid;
@@ -776,10 +797,8 @@
                         const q = query(collection(db, cardsCollectionPath));
                         onSnapshot(q, (querySnapshot) => {
                             savedCards = [];
-                            querySnapshot.forEach((doc) => {
-                                savedCards.push({ id: doc.id, ...doc.data() });
-                            });
-                            if(!currentCard && document.getElementById('template-selector-view').classList.contains('hidden') === false) {
+                            querySnapshot.forEach((doc) => savedCards.push({ id: doc.id, ...doc.data() }));
+                            if(!currentCard && !views.selector.classList.contains('hidden')) {
                                 renderTemplateSelector();
                             }
                         });
@@ -797,7 +816,7 @@
             Object.keys(COMPONENT_TYPES).forEach(type => {
                 const info = COMPONENT_TYPES[type];
                 const button = document.createElement('button');
-                button.className = 'w-full flex items-center gap-3 p-3 rounded-lg bg-gray-800 hover:bg-gray-700 text-white';
+                button.className = 'w-full flex items-center gap-3 p-3 rounded-lg bg-gray-700 hover:bg-gray-600 text-white transition-colors';
                 button.innerHTML = `${info.icon} <span>${info.name}</span>`;
                 button.onclick = () => handleAddComponent(type);
                 addComponentsPanel.appendChild(button);
@@ -806,64 +825,52 @@
             const startButtons = [document.getElementById('start-creating-btn-nav'), document.getElementById('start-creating-btn-hero'), document.getElementById('start-creating-btn-final')];
             startButtons.forEach(btn => btn.onclick = () => switchView('selector'));
             
-            document.getElementById('home-button').onclick = () => {
-                currentCard = null;
-                switchView('landing');
-            };
-            
-            document.getElementById('back-button').onclick = () => {
-                currentCard = null;
-                renderApp();
-            };
-
+            document.getElementById('home-button').onclick = () => { currentCard = null; switchView('landing'); };
+            document.getElementById('back-button').onclick = () => { currentCard = null; renderApp(); };
             document.getElementById('save-button').onclick = handleSaveCard;
-            cardNameInput.oninput = (e) => {
-                if(currentCard) currentCard.name = e.target.value;
-            };
+            cardNameInput.oninput = (e) => { if(currentCard) currentCard.name = e.target.value; };
             
             propertiesPanelContainer.addEventListener('click', (e) => {
-                if (e.target.id === 'delete-component-button') {
-                    handleDeleteComponent();
-                }
+                if (e.target.id === 'delete-component-button') handleDeleteComponent();
             });
 
-            // --- ANIMATION LOGIC ---
+            // Sidebar Toggles
+            document.getElementById('toggle-components-panel').onclick = () => {
+                propertiesPanel.classList.remove('is-open');
+                componentsPanel.classList.toggle('is-open');
+                editorOverlay.classList.toggle('hidden', !componentsPanel.classList.contains('is-open'));
+            };
+            document.getElementById('toggle-properties-panel').onclick = () => {
+                componentsPanel.classList.remove('is-open');
+                propertiesPanel.classList.toggle('is-open');
+                editorOverlay.classList.toggle('hidden', !propertiesPanel.classList.contains('is-open'));
+            };
+
             initLandingPageAnimations();
             initInteractiveTabs();
-
             switchView('landing');
         });
 
         function initLandingPageAnimations() {
-            // GSAP Hero Animation
             const tl = gsap.timeline({ defaults: { ease: "power3.out", duration: 1 } });
             tl.fromTo('section.hero-gradient h1', { opacity: 0, y: 40 }, { opacity: 1, y: 0, delay: 0.2 });
             tl.fromTo('section.hero-gradient p', { opacity: 0, y: 30 }, { opacity: 1, y: 0 }, "-=0.8");
             tl.fromTo('section.hero-gradient button', { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1 }, "-=0.8");
-
             gsap.set('#card1', { opacity: 0, x: -100, y: 50, rotation: -25 });
             gsap.set('#card2', { opacity: 0, scale: 0.7 });
             gsap.set('#card3', { opacity: 0, x: 100, y: 50, rotation: 25 });
-
             tl.to('#card1', { opacity: 1, x: -110, y: -50, rotation: -15, duration: 1.2 }, "-=0.5");
             tl.to('#card3', { opacity: 1, x: 110, y: -30, rotation: 15, duration: 1.2 }, "<");
             tl.to('#card2', { opacity: 1, scale: 1, duration: 1 }, "-=0.8");
-
-            // Mouse move parallax effect on hero cards
             const heroCardsContainer = document.getElementById('hero-cards-container');
             heroCardsContainer.addEventListener('mousemove', (e) => {
                 let rect = heroCardsContainer.getBoundingClientRect();
-                let x = e.clientX - rect.left;
-                let y = e.clientY - rect.top;
-                let dx = (x - rect.width / 2) / (rect.width / 2);
-                let dy = (y - rect.height / 2) / (rect.height / 2);
-
+                let x = e.clientX - rect.left; let y = e.clientY - rect.top;
+                let dx = (x - rect.width / 2) / (rect.width / 2); let dy = (y - rect.height / 2) / (rect.height / 2);
                 gsap.to('#card1', { x: -110 - dx * 20, y: -50 - dy * 20, rotation: -15 - dx * 5, ease: 'power2.out', duration: 0.5 });
                 gsap.to('#card2', { x: -dx * 5, y: -dy * 5, ease: 'power2.out', duration: 0.5 });
                 gsap.to('#card3', { x: 110 - dx * 20, y: -30 - dy * 20, rotation: 15 - dx * 5, ease: 'power2.out', duration: 0.5 });
             });
-
-            // Intersection Observer for scroll animations
             const animatedElements = document.querySelectorAll('[data-animate]');
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -882,23 +889,19 @@
                 { name: "Fundadores y VCs", title: "Conecta con Inversores Clave", description: "Tu próxima ronda de financiación está a una conexión de distancia. Presenta tu visión de forma clara y profesional.", features: ["Comparte tu pitch deck y métricas clave de forma segura.", "Facilita la programación de reuniones con un solo clic.", "Deja una impresión memorable y profesional en cada encuentro."] },
                 { name: "Marketing y Gestores de Marca", title: "Unifica la Imagen de tu Marca", description: "Asegura que cada interacción refleje la identidad de tu marca. Gestiona todas las tarjetas de tu equipo desde un panel centralizado.", features: ["Mantén la consistencia de marca en todas las tarjetas del equipo.", "Mide el ROI de tus eventos de networking con analíticas detalladas.", "Actualiza promociones y campañas en todas las tarjetas al instante."] }
             ];
-
             const tabsNav = document.getElementById('tabs-nav');
             const tabsContent = document.getElementById('tabs-content');
-
+            if(!tabsNav || !tabsContent) return;
             tabsData.forEach((tab, index) => {
                 const button = document.createElement('button');
                 button.className = `tab-button text-left w-full p-3 rounded-lg transition-colors ${index === 0 ? 'active' : ''}`;
                 button.textContent = tab.name;
                 button.dataset.tab = index;
                 tabsNav.appendChild(button);
-
                 const content = document.createElement('div');
                 content.className = 'absolute inset-0 p-8 transition-all duration-500 ease-in-out';
                 content.dataset.tabContent = index;
-                if(index !== 0) {
-                    content.classList.add('opacity-0', 'transform', 'translate-y-5');
-                }
+                if(index !== 0) content.classList.add('opacity-0', 'transform', 'translate-y-5');
                 content.innerHTML = `
                     <h3 class="text-3xl font-bold text-white mb-4">${tab.title}</h3>
                     <p class="text-gray-400 mb-8">${tab.description}</p>
@@ -906,36 +909,20 @@
                         <div class="flex justify-center items-center">
                              <div class="relative mx-auto border-gray-700 bg-gray-800 border-[10px] rounded-[2rem] h-[400px] w-[200px] shadow-xl">
                                 <div class="rounded-[1.5rem] overflow-hidden w-full h-full bg-white text-gray-800 text-xs p-2">
-                                    <p class="font-bold">Mario Rodriguez</p>
-                                    <p class="text-gray-500">CSP Insurance</p>
-                                    <div class="mt-4 space-y-2">
-                                        <div class="bg-gray-200 h-4 rounded"></div>
-                                        <div class="bg-gray-200 h-4 rounded w-5/6"></div>
-                                        <div class="bg-gray-200 h-4 rounded w-3/4"></div>
-                                    </div>
+                                    <p class="font-bold">Mario Rodriguez</p><p class="text-gray-500">CSP Insurance</p>
+                                    <div class="mt-4 space-y-2"><div class="bg-gray-200 h-4 rounded"></div><div class="bg-gray-200 h-4 rounded w-5/6"></div><div class="bg-gray-200 h-4 rounded w-3/4"></div></div>
                                 </div>
                             </div>
                         </div>
-                        <ul class="space-y-4">
-                            ${tab.features.map(feature => `
-                                <li class="flex items-start">
-                                    <svg class="w-6 h-6 text-blue-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                    <span class="text-gray-300">${feature}</span>
-                                </li>
-                            `).join('')}
-                        </ul>
-                    </div>
-                `;
+                        <ul class="space-y-4">${tab.features.map(feature => `<li class="flex items-start"><svg class="w-6 h-6 text-blue-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span class="text-gray-300">${feature}</span></li>`).join('')}</ul>
+                    </div>`;
                 tabsContent.appendChild(content);
             });
-
             tabsNav.addEventListener('click', (e) => {
                 if (e.target.classList.contains('tab-button')) {
                     const tabIndex = e.target.dataset.tab;
-                    
                     tabsNav.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
                     e.target.classList.add('active');
-
                     tabsContent.querySelectorAll('[data-tab-content]').forEach(content => {
                         if (content.dataset.tabContent === tabIndex) {
                             content.classList.remove('opacity-0', 'translate-y-5');
@@ -946,7 +933,6 @@
                 }
             });
         }
-
     </script>
 </body>
 </html>
